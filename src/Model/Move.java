@@ -11,7 +11,6 @@ public enum Move {
     B, B_, B2,
     F, F_, F2,
     NONE, 
-    //TODO:
     X, X_, X2,
     Y, Y_, Y2,
     Z, Z_, Z2,
@@ -25,7 +24,17 @@ public enum Move {
                 return move;
         }
 
-        return Move.U;
+        return Move.NONE;
+    }
+
+    
+	public static Move getByName(String name) {
+        for (Move move : Move.values()) {
+            if (move.name().equals(name))
+                return move;
+        }
+
+        return Move.NONE;
     }
 
     public static ArrayList<Move> getRandomMoves(int size) {
@@ -136,4 +145,5 @@ public enum Move {
                 return false;
         }
     }
+
 }

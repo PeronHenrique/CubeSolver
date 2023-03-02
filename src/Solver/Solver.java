@@ -21,17 +21,28 @@ public class Solver implements Runnable {
     @Override
     public void run() {
         scrambleCube(20);
-
+        makeMoves("y z2");
         solveCube();
+    }
+
+    private void makeMoves(String algorithm) {
+        algorithm = algorithm.toUpperCase();
+        algorithm = algorithm.replace("'", "_");
+
+        ArrayList<Move> moves = new ArrayList<>();
+        for (String s : algorithm.split(" ")) {
+            Move move = Move.getByName(s);
+            moves.add(move);
+            cube.move(move);
+        }
+        renderer.addMoves(moves);
     }
 
     private void scrambleCube(int nMoves) {
         ArrayList<Move> scramble = Move.getRandomMoves(nMoves);
-
-        for (Move move : scramble) {
+        for (Move move : scramble) 
             cube.move(move);
-        }
-
+        
         renderer.addMoves(scramble);
     }
 

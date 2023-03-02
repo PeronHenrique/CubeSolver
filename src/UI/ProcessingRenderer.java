@@ -6,7 +6,11 @@ import processing.core.PVector;
 
 import java.util.ArrayList;
 
+import Model.Corner;
 import Model.Cube;
+import Model.Edge;
+import Model.Face;
+import Model.Move;
 import peasy.*;
 
 public class ProcessingRenderer extends PApplet {
@@ -21,16 +25,16 @@ public class ProcessingRenderer extends PApplet {
 			COLOR.WHITE,
 	};
 
-	private final int MAX_STEPS = 75;
+	private final int MAX_STEPS = 2;
 	private final int HALF_CUBIE_SIZE = 100;
 	private final int CUBIE_SIZE = 200;
 
 	private Cube cube;
 	private PShape cubeShape;
 
-	private ArrayList<Model.Move> moveList;
+	private ArrayList<Move> moveList;
 
-	private Model.Move move;
+	private Move move;
 	private int step;
 	
 
@@ -47,7 +51,7 @@ public class ProcessingRenderer extends PApplet {
 	public void setup() {
 		new PeasyCam(this, 1000);
 		moveList = new ArrayList<>();
-		move = Model.Move.NONE;
+		move = Move.NONE;
 		step = 0;
 		cube = Cube.Solved();
 		drawCube(cube);
@@ -70,7 +74,7 @@ public class ProcessingRenderer extends PApplet {
 			cube.move(move);
 
  			if (moveList.size() == 0) {
-				move = Model.Move.NONE;
+				move = Move.NONE;
 				drawCube(cube);
 				return;
 			}
@@ -83,9 +87,22 @@ public class ProcessingRenderer extends PApplet {
 		step = (step + 1) % MAX_STEPS;
 	}
 
-	public void addMoves(ArrayList<Model.Move> moves) {
+	public void addMoves(ArrayList<Move> moves) {
+		printMoves(moves);
 		moveList.addAll(moves);
 	}
+
+	private void printMoves(ArrayList<Move> moves) {
+        String s = "";
+        for (Move move : moves) 
+            s += move.name() + " ";
+        
+        s = s.replace("_", "'");
+        s = s.replace("X", "x");
+        s = s.replace("Y", "y");
+        s = s.replace("Z", "z");
+        System.out.println(s);
+    }
 
 	private void drawCube(Cube cube) {
 		cubeShape = createShape(GROUP);
@@ -93,45 +110,45 @@ public class ProcessingRenderer extends PApplet {
 		if (cube == null)
 			return;
 
-		drawCenter(cube.getCenterColors(Model.Face.U), Model.Face.U);
-		drawCenter(cube.getCenterColors(Model.Face.B), Model.Face.B);
-		drawCenter(cube.getCenterColors(Model.Face.R), Model.Face.R);
-		drawCenter(cube.getCenterColors(Model.Face.F), Model.Face.F);
-		drawCenter(cube.getCenterColors(Model.Face.L), Model.Face.L);
-		drawCenter(cube.getCenterColors(Model.Face.D), Model.Face.D);
+		drawCenter(cube.getCenterColors(Face.U), Face.U);
+		drawCenter(cube.getCenterColors(Face.B), Face.B);
+		drawCenter(cube.getCenterColors(Face.R), Face.R);
+		drawCenter(cube.getCenterColors(Face.F), Face.F);
+		drawCenter(cube.getCenterColors(Face.L), Face.L);
+		drawCenter(cube.getCenterColors(Face.D), Face.D);
 
-		drawEdge(cube.getEdgeColors(Model.Edge.UB), Model.Edge.UB);
-		drawEdge(cube.getEdgeColors(Model.Edge.UR), Model.Edge.UR);
-		drawEdge(cube.getEdgeColors(Model.Edge.UF), Model.Edge.UF);
-		drawEdge(cube.getEdgeColors(Model.Edge.UL), Model.Edge.UL);
-		drawEdge(cube.getEdgeColors(Model.Edge.FR), Model.Edge.FR);
-		drawEdge(cube.getEdgeColors(Model.Edge.FL), Model.Edge.FL);
-		drawEdge(cube.getEdgeColors(Model.Edge.BL), Model.Edge.BL);
-		drawEdge(cube.getEdgeColors(Model.Edge.BR), Model.Edge.BR);
-		drawEdge(cube.getEdgeColors(Model.Edge.DB), Model.Edge.DB);
-		drawEdge(cube.getEdgeColors(Model.Edge.DR), Model.Edge.DR);
-		drawEdge(cube.getEdgeColors(Model.Edge.DF), Model.Edge.DF);
-		drawEdge(cube.getEdgeColors(Model.Edge.DL), Model.Edge.DL);
+		drawEdge(cube.getEdgeColors(Edge.UB), Edge.UB);
+		drawEdge(cube.getEdgeColors(Edge.UR), Edge.UR);
+		drawEdge(cube.getEdgeColors(Edge.UF), Edge.UF);
+		drawEdge(cube.getEdgeColors(Edge.UL), Edge.UL);
+		drawEdge(cube.getEdgeColors(Edge.FR), Edge.FR);
+		drawEdge(cube.getEdgeColors(Edge.FL), Edge.FL);
+		drawEdge(cube.getEdgeColors(Edge.BL), Edge.BL);
+		drawEdge(cube.getEdgeColors(Edge.BR), Edge.BR);
+		drawEdge(cube.getEdgeColors(Edge.DB), Edge.DB);
+		drawEdge(cube.getEdgeColors(Edge.DR), Edge.DR);
+		drawEdge(cube.getEdgeColors(Edge.DF), Edge.DF);
+		drawEdge(cube.getEdgeColors(Edge.DL), Edge.DL);
 
-		drawCorner(cube.getCornerColors(Model.Corner.ULB),
-				Model.Corner.ULB);
-		drawCorner(cube.getCornerColors(Model.Corner.URB),
-				Model.Corner.URB);
-		drawCorner(cube.getCornerColors(Model.Corner.URF),
-				Model.Corner.URF);
-		drawCorner(cube.getCornerColors(Model.Corner.ULF),
-				Model.Corner.ULF);
-		drawCorner(cube.getCornerColors(Model.Corner.DLB),
-				Model.Corner.DLB);
-		drawCorner(cube.getCornerColors(Model.Corner.DRB),
-				Model.Corner.DRB);
-		drawCorner(cube.getCornerColors(Model.Corner.DRF),
-				Model.Corner.DRF);
-		drawCorner(cube.getCornerColors(Model.Corner.DLF),
-				Model.Corner.DLF);
+		drawCorner(cube.getCornerColors(Corner.ULB),
+				Corner.ULB);
+		drawCorner(cube.getCornerColors(Corner.URB),
+				Corner.URB);
+		drawCorner(cube.getCornerColors(Corner.URF),
+				Corner.URF);
+		drawCorner(cube.getCornerColors(Corner.ULF),
+				Corner.ULF);
+		drawCorner(cube.getCornerColors(Corner.DLB),
+				Corner.DLB);
+		drawCorner(cube.getCornerColors(Corner.DRB),
+				Corner.DRB);
+		drawCorner(cube.getCornerColors(Corner.DRF),
+				Corner.DRF);
+		drawCorner(cube.getCornerColors(Corner.DLF),
+				Corner.DLF);
 	}
 
-	private void drawCenter(byte[] colorIndexes, Model.Face position) {
+	private void drawCenter(byte[] colorIndexes, Face position) {
 		COLOR[] colors = new COLOR[] {
 				COLOR.BLACK, COLOR.BLACK, COLOR.BLACK,
 				COLOR.BLACK, COLOR.BLACK, COLOR.BLACK };
@@ -208,7 +225,7 @@ public class ProcessingRenderer extends PApplet {
 		drawCubie(colors, offset, rotation);
 	}
 
-	private void drawEdge(byte[] colorIndexes, Model.Edge position) {
+	private void drawEdge(byte[] colorIndexes, Edge position) {
 
 		COLOR[] colors = new COLOR[] {
 				COLOR.BLACK, COLOR.BLACK, COLOR.BLACK,
@@ -371,7 +388,7 @@ public class ProcessingRenderer extends PApplet {
 		drawCubie(colors, offset, rotation);
 	}
 
-	private void drawCorner(byte[] colorIndexes, Model.Corner position) {
+	private void drawCorner(byte[] colorIndexes, Corner position) {
 
 		COLOR[] colors = new COLOR[] {
 				COLOR.BLACK, COLOR.BLACK, COLOR.BLACK,
@@ -490,132 +507,132 @@ public class ProcessingRenderer extends PApplet {
 
 	private void getUpRotation(PVector rotation) {
 		float angle = 0;
-		if (move == Model.Move.U)
+		if (move == Move.U)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.U_)
+		if (move == Move.U_)
 			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.U2)
+		if (move == Move.U2)
 			angle = radians((180 * step) / (float) (MAX_STEPS));
 		rotation.add(0, -angle, 0);
 	}
 
 	private void getDownRotation(PVector rotation) {
 		float angle = 0;
-		if (move == Model.Move.D)
+		if (move == Move.D)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.D_)
+		if (move == Move.D_)
 			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.D2)
+		if (move == Move.D2)
 			angle = radians((180 * step) / (float) (MAX_STEPS));
 		rotation.add(0, angle, 0);
 	}
 
 	private void getLeftRotation(PVector rotation) {
 		float angle = 0;
-		if (move == Model.Move.L)
+		if (move == Move.L)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.L_)
+		if (move == Move.L_)
 			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.L2)
+		if (move == Move.L2)
 			angle = radians((180 * step) / (float) (MAX_STEPS));
 		rotation.add(-angle, 0, 0);
 	}
 
 	private void getRightRotation(PVector rotation) {
 		float angle = 0;
-		if (move == Model.Move.R)
+		if (move == Move.R)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.R_)
+		if (move == Move.R_)
 			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.R2)
+		if (move == Move.R2)
 			angle = radians((180 * step) / (float) (MAX_STEPS));
 		rotation.add(angle, 0, 0);
 	}
 
 	private void getBackRotation(PVector rotation) {
 		float angle = 0;
-		if (move == Model.Move.B)
+		if (move == Move.B)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.B_)
+		if (move == Move.B_)
 			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.B2)
+		if (move == Move.B2)
 			angle = radians((180 * step) / (float) (MAX_STEPS));
 		rotation.add(0, 0, -angle);
 	}
 
 	private void getFrontRotation(PVector rotation) {
 		float angle = 0;
-		if (move == Model.Move.F)
+		if (move == Move.F)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.F_)
+		if (move == Move.F_)
 			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.F2)
+		if (move == Move.F2)
 			angle = radians((180 * step) / (float) (MAX_STEPS));
 		rotation.add(0, 0, angle);
 	}
 
 	private void getXRotation(PVector rotation) {
 		float angle = 0;
-		if (move == Model.Move.X)
+		if (move == Move.X)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.X_)
+		if (move == Move.X_)
 			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.X2)
+		if (move == Move.X2)
 			angle = radians((180 * step) / (float) (MAX_STEPS));
 		rotation.add(angle, 0, 0);
 	}
 
 	private void getYRotation(PVector rotation) {
 		float angle = 0;
-		if (move == Model.Move.Y)
+		if (move == Move.Y)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.Y_)
+		if (move == Move.Y_)
 			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.Y2)
+		if (move == Move.Y2)
 			angle = radians((180 * step) / (float) (MAX_STEPS));
 		rotation.add(0, -angle, 0);
 	}
 	
 	private void getZRotation(PVector rotation) {
 		float angle = 0;
-		if (move == Model.Move.Z)
+		if (move == Move.Z)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.Z_)
+		if (move == Move.Z_)
 			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.Z2)
+		if (move == Move.Z2)
 			angle = radians((180 * step) / (float) (MAX_STEPS));
 		rotation.add(0, 0, angle);
 	}
 
 	private void getMRotation(PVector rotation) {
 		float angle = 0;
-		if (move == Model.Move.M)
+		if (move == Move.M)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.M_)
+		if (move == Move.M_)
 			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.M2)
+		if (move == Move.M2)
 			angle = radians((180 * step) / (float) (MAX_STEPS));
 		rotation.add(-angle, 0, 0);
 	}
 
 	private void getERotation(PVector rotation) {
 		float angle = 0;
-		if (move == Model.Move.E)
+		if (move == Move.E)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.E_)
+		if (move == Move.E_)
 			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.E2)
+		if (move == Move.E2)
 			angle = radians((180 * step) / (float) (MAX_STEPS));
 		rotation.add(0, angle, 0);
 	}
 	
 	private void getSRotation(PVector rotation) {
 		float angle = 0;
-		if (move == Model.Move.S)
+		if (move == Move.S)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.S_)
+		if (move == Move.S_)
 			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Model.Move.S2)
+		if (move == Move.S2)
 			angle = radians((180 * step) / (float) (MAX_STEPS));
 		rotation.add(0, 0, angle);
 	}

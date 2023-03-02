@@ -10,26 +10,137 @@ public class Cube {
     }
 
     public void move(Move move) {
+        // if (move == Move.NONE)
+        // return;
+        // String name = move.name();
+
+        // try {
+        // final Method method = Cube.class.getDeclaredMethod(name, null);
+        // method.invoke(this, null);
+        // } catch (NoSuchMethodException e) {
+        // e.printStackTrace();
+        // } catch (SecurityException e) {
+        // e.printStackTrace();
+        // } catch (IllegalAccessException e) {
+        // e.printStackTrace();
+        // } catch (IllegalArgumentException e) {
+        // e.printStackTrace();
+        // } catch (InvocationTargetException e) {
+        // e.printStackTrace();
+        // }
+
         switch (move) {
-            case U: this.u(); break;
-            case U2: this.u2(); break;
-            case U_: this.u_(); break;
-            case L: this.l(); break;
-            case L2: this.l2(); break;
-            case L_: this.l_(); break;
-            case F: this.f(); break;
-            case F2: this.f2(); break;
-            case F_: this.f_(); break;
-            case R: this.r(); break;
-            case R2: this.r2(); break;
-            case R_: this.r_(); break;
-            case B: this.b(); break;
-            case B2: this.b2(); break;
-            case B_: this.b_(); break;
-            case D: this.d(); break;
-            case D2: this.d2(); break;
-            case D_: this.d_(); break;
-            default: case NONE: break;
+            case U:
+                this.U();
+                break;
+            case U2:
+                this.U2();
+                break;
+            case U_:
+                this.U_();
+                break;
+            case L:
+                this.L();
+                break;
+            case L2:
+                this.L2();
+                break;
+            case L_:
+                this.L_();
+                break;
+            case F:
+                this.F();
+                break;
+            case F2:
+                this.F2();
+                break;
+            case F_:
+                this.F_();
+                break;
+            case R:
+                this.R();
+                break;
+            case R2:
+                this.R2();
+                break;
+            case R_:
+                this.R_();
+                break;
+            case B:
+                this.B();
+                break;
+            case B2:
+                this.B2();
+                break;
+            case B_:
+                this.B_();
+                break;
+            case D:
+                this.D();
+                break;
+            case D2:
+                this.D2();
+                break;
+            case D_:
+                this.D_();
+                break;
+            case E:
+                this.E();
+                break;
+            case E2:
+                this.E2();
+                break;
+            case E_:
+                this.E_();
+                break;
+            case M:
+                this.M();
+                break;
+            case M2:
+                this.M2();
+                break;
+            case M_:
+                this.M_();
+                break;
+            case S:
+                this.S();
+                break;
+            case S2:
+                this.S2();
+                break;
+            case S_:
+                this.S_();
+                break;
+            case X:
+                this.X();
+                break;
+            case X2:
+                this.X2();
+                break;
+            case X_:
+                this.X_();
+                break;
+            case Y:
+                this.Y();
+                break;
+            case Y2:
+                this.Y2();
+                break;
+            case Y_:
+                this.Y_();
+                break;
+            case Z:
+                this.Z();
+                break;
+            case Z2:
+                this.Z2();
+                break;
+            case Z_:
+                this.Z_();
+                break;
+            default:
+            case NONE:
+                break;
         }
     }
 
@@ -39,7 +150,7 @@ public class Cube {
      * @param face The face.
      */
     public byte[] getCenterColors(Face face) {
-        return new byte[] { centers[face.ordinal()] };
+        return new byte[] { this.centers[face.ordinal()] };
     }
 
     /**
@@ -52,40 +163,40 @@ public class Cube {
         switch (edge) {
             default:
             case UB:
-                return new byte[] { stickers[1], stickers[33] };
+                return new byte[] { this.stickers[1], this.stickers[33] };
 
             case UR:
-                return new byte[] { stickers[3], stickers[25] };
+                return new byte[] { this.stickers[3], this.stickers[25] };
 
             case UF:
-                return new byte[] { stickers[5], stickers[17] };
+                return new byte[] { this.stickers[5], this.stickers[17] };
 
             case UL:
-                return new byte[] { stickers[7], stickers[9] };
+                return new byte[] { this.stickers[7], this.stickers[9] };
 
             case FR:
-                return new byte[] { stickers[19], stickers[31] };
+                return new byte[] { this.stickers[19], this.stickers[31] };
 
             case FL:
-                return new byte[] { stickers[23], stickers[11] };
+                return new byte[] { this.stickers[23], this.stickers[11] };
 
             case BL:
-                return new byte[] { stickers[35], stickers[15] };
+                return new byte[] { this.stickers[35], this.stickers[15] };
 
             case BR:
-                return new byte[] { stickers[39], stickers[27] };
+                return new byte[] { this.stickers[39], this.stickers[27] };
 
             case DF:
-                return new byte[] { stickers[41], stickers[21] };
+                return new byte[] { this.stickers[41], this.stickers[21] };
 
             case DL:
-                return new byte[] { stickers[47], stickers[13] };
+                return new byte[] { this.stickers[47], this.stickers[13] };
 
             case DB:
-                return new byte[] { stickers[45], stickers[37] };
+                return new byte[] { this.stickers[45], this.stickers[37] };
 
             case DR:
-                return new byte[] { stickers[43], stickers[29] };
+                return new byte[] { this.stickers[43], this.stickers[29] };
         }
     }
 
@@ -98,60 +209,49 @@ public class Cube {
         switch (corner) {
             default:
             case ULB:
-                return new byte[] { stickers[0], stickers[8], stickers[34] };
+                return new byte[] { this.stickers[0], this.stickers[8], this.stickers[34] };
 
             case URB:
-                return new byte[] { stickers[2], stickers[26], stickers[32] };
+                return new byte[] { this.stickers[2], this.stickers[26], this.stickers[32] };
 
             case URF:
-                return new byte[] { stickers[4], stickers[24], stickers[18] };
+                return new byte[] { this.stickers[4], this.stickers[24], this.stickers[18] };
 
             case ULF:
-                return new byte[] { stickers[6], stickers[10], stickers[16] };
+                return new byte[] { this.stickers[6], this.stickers[10], this.stickers[16] };
 
             case DLF:
-                return new byte[] { stickers[40], stickers[12], stickers[22] };
+                return new byte[] { this.stickers[40], this.stickers[12], this.stickers[22] };
 
             case DLB:
-                return new byte[] { stickers[46], stickers[14], stickers[36] };
+                return new byte[] { this.stickers[46], this.stickers[14], this.stickers[36] };
 
             case DRB:
-                return new byte[] { stickers[44], stickers[28], stickers[38] };
+                return new byte[] { this.stickers[44], this.stickers[28], this.stickers[38] };
 
             case DRF:
-                return new byte[] { stickers[42], stickers[30], stickers[20] };
+                return new byte[] { this.stickers[42], this.stickers[30], this.stickers[20] };
         }
     }
 
-    private long getFace(Face side) {
-        long face = 0;
-        for (int i = 0; i < 8; i++)
-            face = (face << 8) | stickers[side.ordinal() * 8 + i];
-        return face;
-    }
-
     public boolean isSolved() {
-        return (this.getFace(Face.U) == 0x0000000000000000l) &&
-                (this.getFace(Face.L) == 0x0101010101010101l) &&
-                (this.getFace(Face.F) == 0x0202020202020202l) &&
-                (this.getFace(Face.R) == 0x0303030303030303l) &&
-                (this.getFace(Face.B) == 0x0404040404040404l) &&
-                (this.getFace(Face.D) == 0x0505050505050505l);
+        for (int i = 0; i < 48; i++) {
+            if(this.stickers[i] != this.centers[i/8]) return false;
+        }
+        return true;
     }
 
-
-    
     private byte[] getCubieFaces(byte[] cubieColors) {
         byte[] cubieFaces = new byte[cubieColors.length];
 
         for (int i = 0; i < cubieFaces.length; i++) {
-            for (int j = 0; j < centers.length; j++) {
-                if(cubieColors[i] == centers[j]){
+            for (int j = 0; j < 6; j++) {
+                if (cubieColors[i] == centers[j]) {
                     cubieFaces[i] = (byte) j;
                     break;
                 }
             }
-        } 
+        }
 
         return cubieFaces;
     }
@@ -167,23 +267,31 @@ public class Cube {
 
         // The colors range from 0 to 5, per RubiksCube.h.
         // Shifting 1 left by 0...5 gives 1, 2, 4, 8, 16, 32.
-        // Adding these together gives a unique number for each corner cubie. 
+        // Adding these together gives a unique number for each corner cubie.
 
         int codex = (1 << cornerFaces[0]) | (1 << cornerFaces[1]) | (1 << cornerFaces[2]);
 
         switch (codex) {
-            default: return 0;
-            case 19: return 0;
-            case 25: return 1;
-            case 13: return 2;
-            case 7: return 3;
-            case 50: return 4;
-            case 56: return 5;
-            case 44: return 6;
-            case 38: return 7;
+            default:
+                return 0;
+            case 19:
+                return 0;
+            case 25:
+                return 1;
+            case 13:
+                return 2;
+            case 7:
+                return 3;
+            case 50:
+                return 4;
+            case 56:
+                return 5;
+            case 44:
+                return 6;
+            case 38:
+                return 7;
         }
     }
-
 
     /**
      * Given a corner index, get the orientation of the piece currently occupying
@@ -203,10 +311,16 @@ public class Cube {
 
         switch (index) {
             default:
-            case ULB: case URF: case DLF: case DRB:
+            case ULB:
+            case URF:
+            case DLF:
+            case DRB:
                 return (corner[1] == centers[0] || corner[1] == centers[5]) ? 1 : 2;
 
-            case URB: case ULF: case DLB: case DRF:
+            case URB:
+            case ULF:
+            case DLB:
+            case DRF:
                 return (corner[2] == centers[0] || corner[2] == centers[5]) ? 1 : 2;
         }
     }
@@ -226,19 +340,31 @@ public class Cube {
         int codex = (1 << edgeFaces[0]) | (1 << edgeFaces[1]);
 
         switch (codex) {
-            default: 
-            case 17: return 0;
-            case 9: return 1;
-            case 5: return 2;
-            case 3: return 3; 
-            case 18: return 4;
-            case 24: return 5;
-            case 12: return 6;
-            case 6: return 7;
-            case 48: return 8;
-            case 40: return 9;
-            case 36: return 10;
-            case 34: return 11;
+            default:
+            case 17:
+                return 0;
+            case 9:
+                return 1;
+            case 5:
+                return 2;
+            case 3:
+                return 3;
+            case 18:
+                return 4;
+            case 24:
+                return 5;
+            case 12:
+                return 6;
+            case 6:
+                return 7;
+            case 48:
+                return 8;
+            case 40:
+                return 9;
+            case 36:
+                return 10;
+            case 34:
+                return 11;
         }
     }
 
@@ -296,20 +422,20 @@ public class Cube {
     }
 
     private void getSolvedStickers() {
-        centers = new byte[] { 0, 1, 2, 3, 4, 5, };
-        stickers = new byte[] {
-                0, 0, 0, 0, 0, 0, 0, 0,
-                1, 1, 1, 1, 1, 1, 1, 1,
-                2, 2, 2, 2, 2, 2, 2, 2,
-                3, 3, 3, 3, 3, 3, 3, 3,
-                4, 4, 4, 4, 4, 4, 4, 4,
+        this.centers = new byte[] { 5, 4, 3, 2, 1, 0, };
+        this.stickers = new byte[] {
                 5, 5, 5, 5, 5, 5, 5, 5,
+                4, 4, 4, 4, 4, 4, 4, 4,
+                3, 3, 3, 3, 3, 3, 3, 3,
+                2, 2, 2, 2, 2, 2, 2, 2,
+                1, 1, 1, 1, 1, 1, 1, 1,
+                0, 0, 0, 0, 0, 0, 0, 0,
         };
     }
 
     private void getCheckerBoardStickers() {
-        centers = new byte[] { 0, 1, 2, 3, 4, 5, };
-        stickers = new byte[] {
+        this.centers = new byte[] { 0, 1, 2, 3, 4, 5, };
+        this.stickers = new byte[] {
                 0, 5, 0, 5, 0, 5, 0, 5,
                 1, 3, 1, 3, 1, 3, 1, 3,
                 2, 4, 2, 4, 2, 4, 2, 4,
@@ -320,10 +446,10 @@ public class Cube {
     }
 
     private void getRandomStickers() {
-        centers = new byte[] { 0, 1, 2, 3, 4, 5, };
-        stickers = new byte[48];
+        this.centers = new byte[] { 0, 1, 2, 3, 4, 5, };
+        this.stickers = new byte[48];
         for (int i = 0; i < 48; i++) {
-            stickers[i] = (byte) (new Random().nextInt(6));
+            this.stickers[i] = (byte) (new Random().nextInt(6));
         }
     }
 
@@ -346,151 +472,258 @@ public class Cube {
     }
 
     private void rotate270(byte[] array, int a, int b, int c, int d) {
-        rotate90(array, d, c, b, a);
+        this.rotate90(array, d, c, b, a);
     }
 
-    private void u() {
-        rotate90(stickers, 0, 2, 4, 6);
-        rotate90(stickers, 1, 3, 5, 7);
-        rotate90(stickers, 32, 24, 16, 8);
-        rotate90(stickers, 33, 25, 17, 9);
-        rotate90(stickers, 34, 26, 18, 10);
+    private void U() {
+        this.rotate90(this.stickers, 0, 2, 4, 6);
+        this.rotate90(this.stickers, 1, 3, 5, 7);
+        this.rotate90(this.stickers, 32, 24, 16, 8);
+        this.rotate90(this.stickers, 33, 25, 17, 9);
+        this.rotate90(this.stickers, 34, 26, 18, 10);
     }
 
-    private void u_() {
-        rotate270(stickers, 0, 2, 4, 6);
-        rotate270(stickers, 1, 3, 5, 7);
-        rotate270(stickers, 32, 24, 16, 8);
-        rotate270(stickers, 33, 25, 17, 9);
-        rotate270(stickers, 34, 26, 18, 10);
+    private void U_() {
+        this.rotate270(this.stickers, 0, 2, 4, 6);
+        this.rotate270(this.stickers, 1, 3, 5, 7);
+        this.rotate270(this.stickers, 32, 24, 16, 8);
+        this.rotate270(this.stickers, 33, 25, 17, 9);
+        this.rotate270(this.stickers, 34, 26, 18, 10);
     }
 
-    private void u2() {
-        rotate180(stickers, 0, 2, 4, 6);
-        rotate180(stickers, 1, 3, 5, 7);
-        rotate180(stickers, 32, 24, 16, 8);
-        rotate180(stickers, 33, 25, 17, 9);
-        rotate180(stickers, 34, 26, 18, 10);
+    private void U2() {
+        this.rotate180(this.stickers, 0, 2, 4, 6);
+        this.rotate180(this.stickers, 1, 3, 5, 7);
+        this.rotate180(this.stickers, 32, 24, 16, 8);
+        this.rotate180(this.stickers, 33, 25, 17, 9);
+        this.rotate180(this.stickers, 34, 26, 18, 10);
     }
 
-    private void d() {
-        rotate90(stickers, 40, 42, 44, 46);
-        rotate90(stickers, 41, 43, 45, 47);
-        rotate90(stickers, 14, 22, 30, 38);
-        rotate90(stickers, 13, 21, 29, 37);
-        rotate90(stickers, 12, 20, 28, 36);
+    private void D() {
+        this.rotate90(this.stickers, 40, 42, 44, 46);
+        this.rotate90(this.stickers, 41, 43, 45, 47);
+        this.rotate90(this.stickers, 14, 22, 30, 38);
+        this.rotate90(this.stickers, 13, 21, 29, 37);
+        this.rotate90(this.stickers, 12, 20, 28, 36);
     }
 
-    private void d_() {
-        rotate270(stickers, 40, 42, 44, 46);
-        rotate270(stickers, 41, 43, 45, 47);
-        rotate270(stickers, 14, 22, 30, 38);
-        rotate270(stickers, 13, 21, 29, 37);
-        rotate270(stickers, 12, 20, 28, 36);
+    private void D_() {
+        this.rotate270(this.stickers, 40, 42, 44, 46);
+        this.rotate270(this.stickers, 41, 43, 45, 47);
+        this.rotate270(this.stickers, 14, 22, 30, 38);
+        this.rotate270(this.stickers, 13, 21, 29, 37);
+        this.rotate270(this.stickers, 12, 20, 28, 36);
     }
 
-    private void d2() {
-        rotate180(stickers, 40, 42, 44, 46);
-        rotate180(stickers, 41, 43, 45, 47);
-        rotate180(stickers, 14, 22, 30, 38);
-        rotate180(stickers, 13, 21, 29, 37);
-        rotate180(stickers, 12, 20, 28, 36);
+    private void D2() {
+        this.rotate180(this.stickers, 40, 42, 44, 46);
+        this.rotate180(this.stickers, 41, 43, 45, 47);
+        this.rotate180(this.stickers, 14, 22, 30, 38);
+        this.rotate180(this.stickers, 13, 21, 29, 37);
+        this.rotate180(this.stickers, 12, 20, 28, 36);
     }
 
-    private void r() {
-        rotate90(stickers, 24, 26, 28, 30);
-        rotate90(stickers, 25, 27, 29, 31);
-        rotate90(stickers, 38, 42, 18, 2);
-        rotate90(stickers, 39, 43, 19, 3);
-        rotate90(stickers, 32, 44, 20, 4);
+    private void R() {
+        this.rotate90(this.stickers, 24, 26, 28, 30);
+        this.rotate90(this.stickers, 25, 27, 29, 31);
+        this.rotate90(this.stickers, 38, 42, 18, 2);
+        this.rotate90(this.stickers, 39, 43, 19, 3);
+        this.rotate90(this.stickers, 32, 44, 20, 4);
     }
 
-    private void r_() {
-        rotate270(stickers, 24, 26, 28, 30);
-        rotate270(stickers, 25, 27, 29, 31);
-        rotate270(stickers, 38, 42, 18, 2);
-        rotate270(stickers, 39, 43, 19, 3);
-        rotate270(stickers, 32, 44, 20, 4);
+    private void R_() {
+        this.rotate270(this.stickers, 24, 26, 28, 30);
+        this.rotate270(this.stickers, 25, 27, 29, 31);
+        this.rotate270(this.stickers, 38, 42, 18, 2);
+        this.rotate270(this.stickers, 39, 43, 19, 3);
+        this.rotate270(this.stickers, 32, 44, 20, 4);
     }
 
-    private void r2() {
-        rotate180(stickers, 24, 26, 28, 30);
-        rotate180(stickers, 25, 27, 29, 31);
-        rotate180(stickers, 38, 42, 18, 2);
-        rotate180(stickers, 39, 43, 19, 3);
-        rotate180(stickers, 32, 44, 20, 4);
+    private void R2() {
+        this.rotate180(this.stickers, 24, 26, 28, 30);
+        this.rotate180(this.stickers, 25, 27, 29, 31);
+        this.rotate180(this.stickers, 38, 42, 18, 2);
+        this.rotate180(this.stickers, 39, 43, 19, 3);
+        this.rotate180(this.stickers, 32, 44, 20, 4);
     }
 
-    private void l() {
-        rotate90(stickers, 8, 10, 12, 14);
-        rotate90(stickers, 9, 11, 13, 15);
-        rotate90(stickers, 6, 22, 46, 34);
-        rotate90(stickers, 7, 23, 47, 35);
-        rotate90(stickers, 0, 16, 40, 36);
+    private void L() {
+        this.rotate90(this.stickers, 8, 10, 12, 14);
+        this.rotate90(this.stickers, 9, 11, 13, 15);
+        this.rotate90(this.stickers, 6, 22, 46, 34);
+        this.rotate90(this.stickers, 7, 23, 47, 35);
+        this.rotate90(this.stickers, 0, 16, 40, 36);
     }
 
-    private void l_() {
-        rotate270(stickers, 8, 10, 12, 14);
-        rotate270(stickers, 9, 11, 13, 15);
-        rotate270(stickers, 6, 22, 46, 34);
-        rotate270(stickers, 7, 23, 47, 35);
-        rotate270(stickers, 0, 16, 40, 36);
+    private void L_() {
+        this.rotate270(this.stickers, 8, 10, 12, 14);
+        this.rotate270(this.stickers, 9, 11, 13, 15);
+        this.rotate270(this.stickers, 6, 22, 46, 34);
+        this.rotate270(this.stickers, 7, 23, 47, 35);
+        this.rotate270(this.stickers, 0, 16, 40, 36);
     }
 
-    private void l2() {
-        rotate180(stickers, 8, 10, 12, 14);
-        rotate180(stickers, 9, 11, 13, 15);
-        rotate180(stickers, 6, 22, 46, 34);
-        rotate180(stickers, 7, 23, 47, 35);
-        rotate180(stickers, 0, 16, 40, 36);
+    private void L2() {
+        this.rotate180(this.stickers, 8, 10, 12, 14);
+        this.rotate180(this.stickers, 9, 11, 13, 15);
+        this.rotate180(this.stickers, 6, 22, 46, 34);
+        this.rotate180(this.stickers, 7, 23, 47, 35);
+        this.rotate180(this.stickers, 0, 16, 40, 36);
     }
 
-    private void f() {
-        rotate90(stickers, 16, 18, 20, 22);
-        rotate90(stickers, 17, 19, 21, 23);
-        rotate90(stickers, 4, 30, 40, 10);
-        rotate90(stickers, 5, 31, 41, 11);
-        rotate90(stickers, 42, 12, 6, 24);
+    private void F() {
+        this.rotate90(this.stickers, 16, 18, 20, 22);
+        this.rotate90(this.stickers, 17, 19, 21, 23);
+        this.rotate90(this.stickers, 4, 30, 40, 10);
+        this.rotate90(this.stickers, 5, 31, 41, 11);
+        this.rotate90(this.stickers, 42, 12, 6, 24);
     }
 
-    private void f_() {
-        rotate270(stickers, 16, 18, 20, 22);
-        rotate270(stickers, 17, 19, 21, 23);
-        rotate270(stickers, 4, 30, 40, 10);
-        rotate270(stickers, 5, 31, 41, 11);
-        rotate270(stickers, 42, 12, 6, 24);
+    private void F_() {
+        this.rotate270(this.stickers, 16, 18, 20, 22);
+        this.rotate270(this.stickers, 17, 19, 21, 23);
+        this.rotate270(this.stickers, 4, 30, 40, 10);
+        this.rotate270(this.stickers, 5, 31, 41, 11);
+        this.rotate270(this.stickers, 42, 12, 6, 24);
     }
 
-    private void f2() {
-        rotate180(stickers, 16, 18, 20, 22);
-        rotate180(stickers, 17, 19, 21, 23);
-        rotate180(stickers, 4, 30, 40, 10);
-        rotate180(stickers, 5, 31, 41, 11);
-        rotate180(stickers, 42, 12, 6, 24);
+    private void F2() {
+        this.rotate180(this.stickers, 16, 18, 20, 22);
+        this.rotate180(this.stickers, 17, 19, 21, 23);
+        this.rotate180(this.stickers, 4, 30, 40, 10);
+        this.rotate180(this.stickers, 5, 31, 41, 11);
+        this.rotate180(this.stickers, 42, 12, 6, 24);
     }
 
-    private void b() {
-        rotate90(stickers, 32, 34, 36, 38);
-        rotate90(stickers, 33, 35, 37, 39);
-        rotate90(stickers, 14, 44, 26, 0);
-        rotate90(stickers, 15, 45, 27, 1);
-        rotate90(stickers, 8, 46, 28, 2);
+    private void B() {
+        this.rotate90(this.stickers, 32, 34, 36, 38);
+        this.rotate90(this.stickers, 33, 35, 37, 39);
+        this.rotate90(this.stickers, 14, 44, 26, 0);
+        this.rotate90(this.stickers, 15, 45, 27, 1);
+        this.rotate90(this.stickers, 8, 46, 28, 2);
     }
 
-    private void b_() {
-        rotate270(stickers, 32, 34, 36, 38);
-        rotate270(stickers, 33, 35, 37, 39);
-        rotate270(stickers, 14, 44, 26, 0);
-        rotate270(stickers, 15, 45, 27, 1);
-        rotate270(stickers, 8, 46, 28, 2);
+    private void B_() {
+        this.rotate270(this.stickers, 32, 34, 36, 38);
+        this.rotate270(this.stickers, 33, 35, 37, 39);
+        this.rotate270(this.stickers, 14, 44, 26, 0);
+        this.rotate270(this.stickers, 15, 45, 27, 1);
+        this.rotate270(this.stickers, 8, 46, 28, 2);
     }
 
-    private void b2() {
-        rotate180(stickers, 32, 34, 36, 38);
-        rotate180(stickers, 33, 35, 37, 39);
-        rotate180(stickers, 14, 44, 26, 0);
-        rotate180(stickers, 15, 45, 27, 1);
-        rotate180(stickers, 8, 46, 28, 2);
+    private void B2() {
+        this.rotate180(this.stickers, 32, 34, 36, 38);
+        this.rotate180(this.stickers, 33, 35, 37, 39);
+        this.rotate180(this.stickers, 14, 44, 26, 0);
+        this.rotate180(this.stickers, 15, 45, 27, 1);
+        this.rotate180(this.stickers, 8, 46, 28, 2);
     }
 
+    private void M() {
+        this.rotate90(this.stickers, 17, 41, 37, 1);
+        this.rotate90(this.stickers, 21, 45, 33, 5);
+        this.rotate90(this.centers, 0, 2, 5, 4);
+    }
+
+    private void M_() {
+        this.rotate270(this.stickers, 17, 41, 37, 1);
+        this.rotate270(this.stickers, 21, 45, 33, 5);
+        this.rotate270(this.centers, 0, 2, 5, 4);
+    }
+
+    private void M2() {
+        this.rotate180(this.stickers, 17, 41, 37, 1);
+        this.rotate180(this.stickers, 21, 45, 33, 5);
+        this.rotate180(this.centers, 0, 2, 5, 4);
+    }
+
+    private void E() {
+        this.rotate90(this.stickers, 11, 19, 27, 35);
+        this.rotate90(this.stickers, 15, 23, 31, 39);
+        this.rotate90(this.centers, 1, 2, 3, 4);
+    }
+
+    private void E_() {
+        this.rotate270(this.stickers, 11, 19, 27, 35);
+        this.rotate270(this.stickers, 15, 23, 31, 39);
+        this.rotate270(this.centers, 1, 2, 3, 4);
+    }
+
+    private void E2() {
+        this.rotate180(this.stickers, 11, 19, 27, 35);
+        this.rotate180(this.stickers, 15, 23, 31, 39);
+        this.rotate180(this.centers, 1, 2, 3, 4);
+    }
+
+    private void S() {
+        this.rotate90(this.stickers, 3, 29, 47, 9);
+        this.rotate90(this.stickers, 7, 25, 43, 13);
+        this.rotate90(this.centers, 0, 3, 5, 1);
+    }
+
+    private void S_() {
+        this.rotate270(this.stickers, 3, 29, 47, 9);
+        this.rotate270(this.stickers, 7, 25, 43, 13);
+        this.rotate270(this.centers, 0, 3, 5, 1);
+    }
+
+    private void S2() {
+        this.rotate180(this.stickers, 3, 29, 47, 9);
+        this.rotate180(this.stickers, 7, 25, 43, 13);
+        this.rotate180(this.centers, 0, 3, 5, 1);
+    }
+
+    private void X() {
+        this.R();
+        this.M_();
+        this.L_();
+    }
+
+    private void X_() {
+        this.R_();
+        this.M();
+        this.L();
+    }
+
+    private void X2() {
+        this.R2();
+        this.M2();
+        this.L2();
+    }
+
+    private void Y() {
+        this.U();
+        this.E_();
+        this.D_();
+    }
+
+    private void Y_() {
+        this.U_();
+        this.E();
+        this.D();
+    }
+
+    private void Y2() {
+        this.U2();
+        this.E2();
+        this.D2();
+    }
+
+    private void Z() {
+        this.F();
+        this.S();
+        this.B_();
+    }
+
+    private void Z_() {
+        this.F_();
+        this.S_();
+        this.B();
+    }
+
+    private void Z2() {
+        this.F2();
+        this.S2();
+        this.B2();
+    }
 }
