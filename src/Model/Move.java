@@ -16,7 +16,13 @@ public enum Move {
     Z, Z_, Z2,
     M, M_, M2,
     E, E_, E2,
-    S, S_, S2,;
+    S, S_, S2,
+    UW, UW_, UW2,
+    DW, DW_, DW2,
+    LW, LW_, LW2,
+    RW, RW_, RW2,
+    BW, BW_, BW2,
+    FW, FW_, FW2,;
 
     public static Move getByIndex(int index) {
         for (Move move : Move.values()) {

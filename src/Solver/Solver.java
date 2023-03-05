@@ -12,27 +12,48 @@ public class Solver implements Runnable {
 
     private Cube cube;
     private ProcessingRenderer renderer;
-    private final int scrambleSpeed = 15;
-    private final int solveSpeed = 50;
 
     public Solver(ProcessingRenderer renderer) {
         this.renderer = renderer;
         this.cube = Cube.Solved();
     }
 
+    private final String testScramble = "";
+    private final int scrambleSpeed = 50;
+    private final int solveSpeed = 50;
+
     @Override
     public void run() {
         System.out.println("Scramble:");
-        scrambleCube(20);
-        // makeMoves("R2 L2 D2 L' F R' U L2 F' B L' B D2 F L2 B' F U2 D F'",
-        // scrambleSpeed);
+        if ("".equals(testScramble))
+            scrambleCube(20);
+        else
+            makeMoves(testScramble, scrambleSpeed);
+
         System.out.println("\nReorienting:");
         makeMoves("y z2", scrambleSpeed);
-        solveCube();
+
+        System.out.println("\nCross:");
+        solveCross();
+
+        System.out.println("\nF2L:");
+        solveF2L();
+
+        // TODO: solve LL
+        System.out.println("\nOLL:");
+        solveOLL();
     }
 
     private void makeMoves(String algorithm, int maxStep) {
-        algorithm = algorithm.toUpperCase();
+        algorithm = algorithm.replace("r", "RW");
+        algorithm = algorithm.replace("l", "LW");
+        algorithm = algorithm.replace("u", "UW");
+        algorithm = algorithm.replace("d", "DW");
+        algorithm = algorithm.replace("b", "BW");
+        algorithm = algorithm.replace("f", "FW");
+        algorithm = algorithm.replace("x", "X");
+        algorithm = algorithm.replace("y", "Y");
+        algorithm = algorithm.replace("z", "Z");
         algorithm = algorithm.replace("'", "_");
 
         ArrayList<Move> moves = new ArrayList<>();
@@ -51,18 +72,6 @@ public class Solver implements Runnable {
             cube.move(move);
 
         renderer.addMoves(scramble, scrambleSpeed);
-    }
-
-    private void solveCube() {
-        System.out.println("\nCross:");
-        solveCross();
-
-        System.out.println("\nF2L:");
-        solveF2L();
-
-        System.out.println("\nOLL:");
-        solveOLL();
-        // TODO: solve LL
     }
 
     private void solveCross() {
@@ -135,16 +144,21 @@ public class Solver implements Runnable {
     }
 
     private void solveOLL() {
+        makeMoves(Algs.F2L[calculatOLLindex()], solveSpeed);
     }
 
     private int calculatOLLindex() {
         int codex = 0;
         int index = 0;
 
-        codex = (cube.edgeOrientation[0] << 0) + (cube.edgeOrientation[1] << 2) +
-                (cube.edgeOrientation[2] << 4) + (cube.edgeOrientation[3] << 6) +
-                (cube.cornerOrientation[0] << 8) + (cube.cornerOrientation[1] << 10) +
-                (cube.cornerOrientation[2] << 12) + (cube.cornerOrientation[3] << 14);
+        codex = (cube.cornerOrientation[0] << 0) +
+                (cube.edgeOrientation[0] << 2) +
+                (cube.cornerOrientation[1] << 4) +
+                (cube.edgeOrientation[1] << 6) +
+                (cube.cornerOrientation[2] << 8) +
+                (cube.edgeOrientation[2] << 10) +
+                (cube.cornerOrientation[3] << 12) +
+                (cube.edgeOrientation[3] << 14);
 
         switch (codex) {
             default:

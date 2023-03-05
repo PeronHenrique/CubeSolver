@@ -6,7 +6,6 @@ public class Cube {
     private byte[] stickers;
     private byte[] centers;
 
-    
     public Corner[] corners;
     public int[] cornerOrientation;
     public Edge[] edges;
@@ -148,11 +147,65 @@ public class Cube {
             case Z_:
                 this.Z_();
                 break;
+            case BW:
+                this.BW();
+                break;
+            case BW2:
+                this.BW2();
+                break;
+            case BW_:
+                this.BW_();
+                break;
+            case DW:
+                this.DW();
+                break;
+            case DW2:
+                this.DW2();
+                break;
+            case DW_:
+                this.DW_();
+                break;
+            case FW:
+                this.FW();
+                break;
+            case FW2:
+                this.FW2();
+                break;
+            case FW_:
+                this.FW_();
+                break;
+            case LW:
+                this.LW();
+                break;
+            case LW2:
+                this.LW2();
+                break;
+            case LW_:
+                this.LW_();
+                break;
+            case RW:
+                this.RW();
+                break;
+            case RW2:
+                this.RW2();
+                break;
+            case RW_:
+                this.RW_();
+                break;
+            case UW:
+                this.UW();
+                break;
+            case UW2:
+                this.UW2();
+                break;
+            case UW_:
+                this.UW_();
+                break;
             default:
             case NONE:
                 break;
         }
-        
+
         this.update();
     }
 
@@ -248,7 +301,8 @@ public class Cube {
 
     public boolean isSolved() {
         for (int i = 0; i < 48; i++) {
-            if(this.stickers[i] != this.centers[i/8]) return false;
+            if (this.stickers[i] != this.centers[i / 8])
+                return false;
         }
         return true;
     }
@@ -413,8 +467,6 @@ public class Cube {
         return 0;
     }
 
-
-
     private void update() {
         for (int i = 0; i < 8; i++) {
             this.corners[i] = this.getCornerIndex(Corner.getByIndex(i));
@@ -444,8 +496,6 @@ public class Cube {
 
         return -1;
     }
-
-
 
     public static Cube Solved() {
         Cube cube = new Cube();
@@ -770,4 +820,95 @@ public class Cube {
         this.S2();
         this.B2();
     }
+
+    private void BW() {
+        this.B();
+        this.S_();
+    }
+
+    private void BW2() {
+        this.B2();
+        this.S2();
+    }
+
+    private void BW_() {
+        this.B_();
+        this.S();
+    }
+
+    private void DW() {
+        this.D();
+        this.E();
+    }
+
+    private void DW2() {
+        this.D2();
+        this.E2();
+    }
+
+    private void DW_() {
+        this.D_();
+        this.E_();
+    }
+
+    private void FW() {
+        this.F();
+        this.S();
+    }
+
+    private void FW2() {
+        this.F2();
+        this.S2();
+    }
+
+    private void FW_() {
+        this.F_();
+        this.S_();
+    }
+
+    private void LW() {
+        this.L();
+        this.M();
+    }
+
+    private void LW2() {
+        this.L2();
+        this.M2();
+    }
+
+    private void LW_() {
+        this.L_();
+        this.M_();
+    }
+
+    private void RW() {
+        this.R();
+        this.M_();
+    }
+
+    private void RW2() {
+        this.R2();
+        this.M2();
+    }
+
+    private void RW_() {
+        this.R_();
+        this.M();
+    }
+
+    private void UW() {
+        this.U();
+        this.E_();
+    }
+
+    private void UW2() {
+        this.U2();
+        this.E2();
+    }
+
+    private void UW_() {
+        this.U_();
+        this.E();
+    }
+
 }

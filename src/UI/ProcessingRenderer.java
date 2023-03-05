@@ -25,7 +25,8 @@ public class ProcessingRenderer extends PApplet {
 		}
 
 		public Move getNext() {
-			if(moves.size() == 0) return Move.NONE;
+			if (moves.size() == 0)
+				return Move.NONE;
 
 			Move move = moves.get(0);
 			moves.remove(0);
@@ -58,7 +59,6 @@ public class ProcessingRenderer extends PApplet {
 	private int step;
 
 	private int MAX_STEPS = 75;
-	
 
 	public ProcessingRenderer() {
 		PApplet.runSketch(new String[] { "Cube Solver" }, this);
@@ -102,7 +102,7 @@ public class ProcessingRenderer extends PApplet {
 				return;
 			}
 
-			if (moveLists.get(0).isEmpty()){
+			if (moveLists.get(0).isEmpty()) {
 				moveLists.remove(0);
 
 				if (moveLists.size() == 0) {
@@ -121,23 +121,25 @@ public class ProcessingRenderer extends PApplet {
 
 	public void addMoves(ArrayList<Move> moves, int maxSteps) {
 		printMoves(moves);
-		if(maxSteps <= 0) maxSteps = 75;
-		if (moveLists.size() == 0) 	MAX_STEPS = maxSteps;
+		if (maxSteps <= 0)
+			maxSteps = 75;
+		if (moveLists.size() == 0)
+			MAX_STEPS = maxSteps;
 
 		moveLists.add(new MoveList(moves, maxSteps));
 	}
 
 	private void printMoves(ArrayList<Move> moves) {
-        String s = "";
-        for (Move move : moves) 
-            s += move.name() + " ";
-        
-        s = s.replace("_", "'");
-        s = s.replace("X", "x");
-        s = s.replace("Y", "y");
-        s = s.replace("Z", "z");
-        System.out.println(s);
-    }
+		String s = "";
+		for (Move move : moves)
+			s += move.name() + " ";
+
+		s = s.replace("_", "'");
+		s = s.replace("X", "x");
+		s = s.replace("Y", "y");
+		s = s.replace("Z", "z");
+		System.out.println(s);
+	}
 
 	private void drawCube(Cube cube) {
 		cubeShape = createShape(GROUP);
@@ -165,22 +167,14 @@ public class ProcessingRenderer extends PApplet {
 		drawEdge(cube.getEdgeColors(Edge.DF), Edge.DF);
 		drawEdge(cube.getEdgeColors(Edge.DL), Edge.DL);
 
-		drawCorner(cube.getCornerColors(Corner.ULB),
-				Corner.ULB);
-		drawCorner(cube.getCornerColors(Corner.URB),
-				Corner.URB);
-		drawCorner(cube.getCornerColors(Corner.URF),
-				Corner.URF);
-		drawCorner(cube.getCornerColors(Corner.ULF),
-				Corner.ULF);
-		drawCorner(cube.getCornerColors(Corner.DLB),
-				Corner.DLB);
-		drawCorner(cube.getCornerColors(Corner.DRB),
-				Corner.DRB);
-		drawCorner(cube.getCornerColors(Corner.DRF),
-				Corner.DRF);
-		drawCorner(cube.getCornerColors(Corner.DLF),
-				Corner.DLF);
+		drawCorner(cube.getCornerColors(Corner.ULB), Corner.ULB);
+		drawCorner(cube.getCornerColors(Corner.URB), Corner.URB);
+		drawCorner(cube.getCornerColors(Corner.URF), Corner.URF);
+		drawCorner(cube.getCornerColors(Corner.ULF), Corner.ULF);
+		drawCorner(cube.getCornerColors(Corner.DLB), Corner.DLB);
+		drawCorner(cube.getCornerColors(Corner.DRB), Corner.DRB);
+		drawCorner(cube.getCornerColors(Corner.DRF), Corner.DRF);
+		drawCorner(cube.getCornerColors(Corner.DLF), Corner.DLF);
 	}
 
 	private void drawCenter(byte[] colorIndexes, Face position) {
@@ -200,60 +194,96 @@ public class ProcessingRenderer extends PApplet {
 				colors[0] = cubeColors[colorIndexes[0]];
 				offset.add(0, -CUBIE_SIZE, 0);
 
-				getUpRotation(rotation);
+				getURotation(rotation);
 
 				getMRotation(rotation);
 				getSRotation(rotation);
+
+				getUWRotation(rotation);
+				getFWRotation(rotation);
+				getBWRotation(rotation);
+				getRWRotation(rotation);
+				getLWRotation(rotation);
 				break;
 
 			case L:
 				colors[1] = cubeColors[colorIndexes[0]];
 				offset.add(-CUBIE_SIZE, 0, 0);
 
-				getLeftRotation(rotation);
-				
+				getLRotation(rotation);
+
 				getSRotation(rotation);
 				getERotation(rotation);
+				
+				getUWRotation(rotation);
+				getDWRotation(rotation);
+				getFWRotation(rotation);
+				getBWRotation(rotation);
+				getLWRotation(rotation);
 				break;
 
 			case F:
 				colors[2] = cubeColors[colorIndexes[0]];
 				offset.add(0, 0, CUBIE_SIZE);
 
-				getFrontRotation(rotation);
-				
+				getFRotation(rotation);
+
 				getMRotation(rotation);
 				getERotation(rotation);
+				
+				getUWRotation(rotation);
+				getDWRotation(rotation);
+				getFWRotation(rotation);
+				getRWRotation(rotation);
+				getLWRotation(rotation);
 				break;
 
 			case R:
 				colors[3] = cubeColors[colorIndexes[0]];
 				offset.add(CUBIE_SIZE, 0, 0);
 
-				getRightRotation(rotation);
-				
+				getRRotation(rotation);
+
 				getSRotation(rotation);
 				getERotation(rotation);
+				
+				getUWRotation(rotation);
+				getDWRotation(rotation);
+				getFWRotation(rotation);
+				getBWRotation(rotation);
+				getRWRotation(rotation);
 				break;
 
 			case B:
 				colors[4] = cubeColors[colorIndexes[0]];
 				offset.add(0, 0, -CUBIE_SIZE);
 
-				getBackRotation(rotation);
-				
+				getBRotation(rotation);
+
 				getMRotation(rotation);
 				getERotation(rotation);
+				
+				getUWRotation(rotation);
+				getDWRotation(rotation);
+				getBWRotation(rotation);
+				getRWRotation(rotation);
+				getLWRotation(rotation);
 				break;
 
 			case D:
 				colors[5] = cubeColors[colorIndexes[0]];
 				offset.add(0, CUBIE_SIZE, 0);
 
-				getDownRotation(rotation);
-				
+				getDRotation(rotation);
+
 				getMRotation(rotation);
 				getSRotation(rotation);
+				
+				getDWRotation(rotation);
+				getFWRotation(rotation);
+				getBWRotation(rotation);
+				getRWRotation(rotation);
+				getLWRotation(rotation);
 				break;
 		}
 
@@ -280,10 +310,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(0, -CUBIE_SIZE, -CUBIE_SIZE);
 
-				getUpRotation(rotation);
-				getBackRotation(rotation);
+				getURotation(rotation);
+				getBRotation(rotation);
 
 				getMRotation(rotation);
+				
+				getUWRotation(rotation);
+				getBWRotation(rotation);
+				getRWRotation(rotation);
+				getLWRotation(rotation);
 				break;
 
 			case UR:
@@ -292,10 +327,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, -CUBIE_SIZE, 0);
 
-				getUpRotation(rotation);
-				getRightRotation(rotation);
-				
+				getURotation(rotation);
+				getRRotation(rotation);
+
 				getSRotation(rotation);
+				
+				getUWRotation(rotation);
+				getFWRotation(rotation);
+				getBWRotation(rotation);
+				getRWRotation(rotation);
 				break;
 
 			case UF:
@@ -304,10 +344,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(0, -CUBIE_SIZE, CUBIE_SIZE);
 
-				getUpRotation(rotation);
-				getFrontRotation(rotation);
+				getURotation(rotation);
+				getFRotation(rotation);
 
 				getMRotation(rotation);
+				
+				getUWRotation(rotation);
+				getFWRotation(rotation);
+				getRWRotation(rotation);
+				getLWRotation(rotation);
 				break;
 
 			case UL:
@@ -316,10 +361,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, -CUBIE_SIZE, 0);
 
-				getUpRotation(rotation);
-				getLeftRotation(rotation);
-				
+				getURotation(rotation);
+				getLRotation(rotation);
+
 				getSRotation(rotation);
+				
+				getUWRotation(rotation);
+				getFWRotation(rotation);
+				getBWRotation(rotation);
+				getLWRotation(rotation);
 				break;
 
 			case BL:
@@ -328,10 +378,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, 0, -CUBIE_SIZE);
 
-				getLeftRotation(rotation);
-				getBackRotation(rotation);
-				
+				getLRotation(rotation);
+				getBRotation(rotation);
+
 				getERotation(rotation);
+				
+				getUWRotation(rotation);
+				getDWRotation(rotation);
+				getBWRotation(rotation);
+				getLWRotation(rotation);
 				break;
 
 			case BR:
@@ -340,10 +395,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, 0, -CUBIE_SIZE);
 
-				getRightRotation(rotation);
-				getBackRotation(rotation);
-				
+				getRRotation(rotation);
+				getBRotation(rotation);
+
 				getERotation(rotation);
+				
+				getUWRotation(rotation);
+				getDWRotation(rotation);
+				getBWRotation(rotation);
+				getRWRotation(rotation);
 				break;
 
 			case FL:
@@ -352,10 +412,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, 0, CUBIE_SIZE);
 
-				getLeftRotation(rotation);
-				getFrontRotation(rotation);
-				
+				getLRotation(rotation);
+				getFRotation(rotation);
+
 				getERotation(rotation);
+				
+				getUWRotation(rotation);
+				getDWRotation(rotation);
+				getFWRotation(rotation);
+				getLWRotation(rotation);
 				break;
 
 			case FR:
@@ -364,10 +429,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, 0, CUBIE_SIZE);
 
-				getRightRotation(rotation);
-				getFrontRotation(rotation);
-				
+				getRRotation(rotation);
+				getFRotation(rotation);
+
 				getERotation(rotation);
+				
+				getUWRotation(rotation);
+				getDWRotation(rotation);
+				getFWRotation(rotation);
+				getRWRotation(rotation);
 				break;
 
 			case DB:
@@ -376,10 +446,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(0, CUBIE_SIZE, -CUBIE_SIZE);
 
-				getDownRotation(rotation);
-				getBackRotation(rotation);
-				
+				getDRotation(rotation);
+				getBRotation(rotation);
+
 				getMRotation(rotation);
+				
+				getDWRotation(rotation);
+				getBWRotation(rotation);
+				getRWRotation(rotation);
+				getLWRotation(rotation);
 				break;
 
 			case DR:
@@ -388,10 +463,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, CUBIE_SIZE, 0);
 
-				getDownRotation(rotation);
-				getRightRotation(rotation);
-				
+				getDRotation(rotation);
+				getRRotation(rotation);
+
 				getSRotation(rotation);
+				
+				getDWRotation(rotation);
+				getFWRotation(rotation);
+				getBWRotation(rotation);
+				getRWRotation(rotation);
 				break;
 
 			case DF:
@@ -400,10 +480,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(0, CUBIE_SIZE, CUBIE_SIZE);
 
-				getDownRotation(rotation);
-				getFrontRotation(rotation);
-				
+				getDRotation(rotation);
+				getFRotation(rotation);
+
 				getMRotation(rotation);
+				
+				getDWRotation(rotation);
+				getFWRotation(rotation);
+				getRWRotation(rotation);
+				getLWRotation(rotation);
 				break;
 
 			case DL:
@@ -412,10 +497,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, CUBIE_SIZE, 0);
 
-				getDownRotation(rotation);
-				getLeftRotation(rotation);
-				
+				getDRotation(rotation);
+				getLRotation(rotation);
+
 				getSRotation(rotation);
+				
+				getDWRotation(rotation);
+				getFWRotation(rotation);
+				getBWRotation(rotation);
+				getLWRotation(rotation);
 				break;
 
 		}
@@ -444,9 +534,13 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, -CUBIE_SIZE, -CUBIE_SIZE);
 
-				getUpRotation(rotation);
-				getLeftRotation(rotation);
-				getBackRotation(rotation);
+				getURotation(rotation);
+				getLRotation(rotation);
+				getBRotation(rotation);
+				
+				getUWRotation(rotation);
+				getBWRotation(rotation);
+				getLWRotation(rotation);
 				break;
 
 			case URB:
@@ -456,9 +550,13 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, -CUBIE_SIZE, -CUBIE_SIZE);
 
-				getUpRotation(rotation);
-				getRightRotation(rotation);
-				getBackRotation(rotation);
+				getURotation(rotation);
+				getRRotation(rotation);
+				getBRotation(rotation);
+
+				getUWRotation(rotation);
+				getRWRotation(rotation);
+				getBWRotation(rotation);
 				break;
 
 			case ULF:
@@ -468,9 +566,13 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, -CUBIE_SIZE, CUBIE_SIZE);
 
-				getUpRotation(rotation);
-				getLeftRotation(rotation);
-				getFrontRotation(rotation);
+				getURotation(rotation);
+				getLRotation(rotation);
+				getFRotation(rotation);
+
+				getUWRotation(rotation);
+				getLWRotation(rotation);
+				getFWRotation(rotation);
 				break;
 
 			case URF:
@@ -480,9 +582,13 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, -CUBIE_SIZE, CUBIE_SIZE);
 
-				getUpRotation(rotation);
-				getRightRotation(rotation);
-				getFrontRotation(rotation);
+				getURotation(rotation);
+				getRRotation(rotation);
+				getFRotation(rotation);
+
+				getUWRotation(rotation);
+				getRWRotation(rotation);
+				getFWRotation(rotation);
 				break;
 
 			case DLB:
@@ -492,9 +598,13 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, CUBIE_SIZE, -CUBIE_SIZE);
 
-				getDownRotation(rotation);
-				getLeftRotation(rotation);
-				getBackRotation(rotation);
+				getDRotation(rotation);
+				getLRotation(rotation);
+				getBRotation(rotation);
+
+				getDWRotation(rotation);
+				getLWRotation(rotation);
+				getBWRotation(rotation);
 				break;
 
 			case DRB:
@@ -504,9 +614,13 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, CUBIE_SIZE, -CUBIE_SIZE);
 
-				getDownRotation(rotation);
-				getRightRotation(rotation);
-				getBackRotation(rotation);
+				getDRotation(rotation);
+				getRRotation(rotation);
+				getBRotation(rotation);
+
+				getDWRotation(rotation);
+				getRWRotation(rotation);
+				getBWRotation(rotation);
 				break;
 
 			case DLF:
@@ -516,9 +630,13 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, CUBIE_SIZE, CUBIE_SIZE);
 
-				getDownRotation(rotation);
-				getLeftRotation(rotation);
-				getFrontRotation(rotation);
+				getDRotation(rotation);
+				getLRotation(rotation);
+				getFRotation(rotation);
+
+				getDWRotation(rotation);
+				getLWRotation(rotation);
+				getFWRotation(rotation);
 				break;
 
 			case DRF:
@@ -528,9 +646,13 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, CUBIE_SIZE, CUBIE_SIZE);
 
-				getDownRotation(rotation);
-				getRightRotation(rotation);
-				getFrontRotation(rotation);
+				getDRotation(rotation);
+				getRRotation(rotation);
+				getFRotation(rotation);
+
+				getDWRotation(rotation);
+				getRWRotation(rotation);
+				getFWRotation(rotation);
 				break;
 			default:
 				break;
@@ -538,138 +660,6 @@ public class ProcessingRenderer extends PApplet {
 		}
 
 		drawCubie(colors, offset, rotation);
-	}
-
-	private void getUpRotation(PVector rotation) {
-		float angle = 0;
-		if (move == Move.U)
-			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Move.U_)
-			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Move.U2)
-			angle = radians((180 * step) / (float) (MAX_STEPS));
-		rotation.add(0, -angle, 0);
-	}
-
-	private void getDownRotation(PVector rotation) {
-		float angle = 0;
-		if (move == Move.D)
-			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Move.D_)
-			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Move.D2)
-			angle = radians((180 * step) / (float) (MAX_STEPS));
-		rotation.add(0, angle, 0);
-	}
-
-	private void getLeftRotation(PVector rotation) {
-		float angle = 0;
-		if (move == Move.L)
-			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Move.L_)
-			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Move.L2)
-			angle = radians((180 * step) / (float) (MAX_STEPS));
-		rotation.add(-angle, 0, 0);
-	}
-
-	private void getRightRotation(PVector rotation) {
-		float angle = 0;
-		if (move == Move.R)
-			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Move.R_)
-			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Move.R2)
-			angle = radians((180 * step) / (float) (MAX_STEPS));
-		rotation.add(angle, 0, 0);
-	}
-
-	private void getBackRotation(PVector rotation) {
-		float angle = 0;
-		if (move == Move.B)
-			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Move.B_)
-			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Move.B2)
-			angle = radians((180 * step) / (float) (MAX_STEPS));
-		rotation.add(0, 0, -angle);
-	}
-
-	private void getFrontRotation(PVector rotation) {
-		float angle = 0;
-		if (move == Move.F)
-			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Move.F_)
-			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Move.F2)
-			angle = radians((180 * step) / (float) (MAX_STEPS));
-		rotation.add(0, 0, angle);
-	}
-
-	private void getXRotation(PVector rotation) {
-		float angle = 0;
-		if (move == Move.X)
-			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Move.X_)
-			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Move.X2)
-			angle = radians((180 * step) / (float) (MAX_STEPS));
-		rotation.add(angle, 0, 0);
-	}
-
-	private void getYRotation(PVector rotation) {
-		float angle = 0;
-		if (move == Move.Y)
-			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Move.Y_)
-			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Move.Y2)
-			angle = radians((180 * step) / (float) (MAX_STEPS));
-		rotation.add(0, -angle, 0);
-	}
-	
-	private void getZRotation(PVector rotation) {
-		float angle = 0;
-		if (move == Move.Z)
-			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Move.Z_)
-			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Move.Z2)
-			angle = radians((180 * step) / (float) (MAX_STEPS));
-		rotation.add(0, 0, angle);
-	}
-
-	private void getMRotation(PVector rotation) {
-		float angle = 0;
-		if (move == Move.M)
-			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Move.M_)
-			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Move.M2)
-			angle = radians((180 * step) / (float) (MAX_STEPS));
-		rotation.add(-angle, 0, 0);
-	}
-
-	private void getERotation(PVector rotation) {
-		float angle = 0;
-		if (move == Move.E)
-			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Move.E_)
-			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Move.E2)
-			angle = radians((180 * step) / (float) (MAX_STEPS));
-		rotation.add(0, angle, 0);
-	}
-	
-	private void getSRotation(PVector rotation) {
-		float angle = 0;
-		if (move == Move.S)
-			angle = radians((90 * step) / (float) (MAX_STEPS));
-		if (move == Move.S_)
-			angle = radians((-90 * step) / (float) (MAX_STEPS));
-		if (move == Move.S2)
-			angle = radians((180 * step) / (float) (MAX_STEPS));
-		rotation.add(0, 0, angle);
 	}
 
 	private void drawCubie(COLOR[] colors, PVector offset, PVector rotation) {
@@ -760,6 +750,204 @@ public class ProcessingRenderer extends PApplet {
 		temp.endShape(CLOSE);
 		temp.setFill(color);
 		return temp;
+	}
+
+	private void getURotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.U)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.U_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.U2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(0, -angle, 0);
+	}
+
+	private void getDRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.D)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.D_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.D2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(0, angle, 0);
+	}
+
+	private void getLRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.L)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.L_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.L2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(-angle, 0, 0);
+	}
+
+	private void getRRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.R)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.R_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.R2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(angle, 0, 0);
+	}
+
+	private void getBRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.B)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.B_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.B2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(0, 0, -angle);
+	}
+
+	private void getFRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.F)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.F_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.F2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(0, 0, angle);
+	}
+
+	private void getXRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.X)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.X_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.X2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(angle, 0, 0);
+	}
+
+	private void getYRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.Y)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.Y_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.Y2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(0, -angle, 0);
+	}
+
+	private void getZRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.Z)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.Z_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.Z2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(0, 0, angle);
+	}
+
+	private void getMRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.M)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.M_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.M2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(-angle, 0, 0);
+	}
+
+	private void getERotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.E)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.E_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.E2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(0, angle, 0);
+	}
+
+	private void getSRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.S)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.S_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.S2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(0, 0, angle);
+	}
+
+	private void getUWRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.UW)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.UW_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.UW2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(0, -angle, 0);
+	}
+
+	private void getDWRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.DW)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.DW_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.DW2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(0, angle, 0);
+	}
+
+	private void getLWRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.LW)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.LW_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.LW2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(-angle, 0, 0);
+	}
+
+	private void getRWRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.RW)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.RW_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.RW2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(angle, 0, 0);
+	}
+
+	private void getBWRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.BW)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.BW_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.BW2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(0, 0, -angle);
+	}
+
+	private void getFWRotation(PVector rotation) {
+		float angle = 0;
+		if (move == Move.FW)
+			angle = radians((90 * step) / (float) (MAX_STEPS));
+		if (move == Move.FW_)
+			angle = radians((-90 * step) / (float) (MAX_STEPS));
+		if (move == Move.FW2)
+			angle = radians((180 * step) / (float) (MAX_STEPS));
+		rotation.add(0, 0, angle);
 	}
 
 }

@@ -2,7 +2,7 @@ package Solver;
 
 public class Algs {
 
-    public final static String[] cross = {
+    public static final String[] cross = {
             // 0
             "U2 F2",
             "U R' F R",
@@ -78,4 +78,10 @@ public class Algs {
             "U F' U' F U' F R' F' R",
             "F' U' F",
     };
+
+    
+    public static final String[] OLL = {
+
+    };
+
 }
