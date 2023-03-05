@@ -15,6 +15,27 @@ import peasy.*;
 
 public class ProcessingRenderer extends PApplet {
 
+	private class MoveList {
+		public ArrayList<Move> moves = new ArrayList<>();
+		public int maxSteps = 75;
+
+		public MoveList(ArrayList<Move> moves, int maxSteps) {
+			this.maxSteps = maxSteps;
+			this.moves = moves;
+		}
+
+		public Move getNext() {
+			if(moves.size() == 0) return Move.NONE;
+
+			Move move = moves.get(0);
+			moves.remove(0);
+			return move;
+		}
+
+		public boolean isEmpty() {
+			return moves.size() == 0;
+		}
+	}
 
 	private final COLOR cubeColors[] = {
 			COLOR.YELLOW,
@@ -25,17 +46,18 @@ public class ProcessingRenderer extends PApplet {
 			COLOR.WHITE,
 	};
 
-	private final int MAX_STEPS = 2;
 	private final int HALF_CUBIE_SIZE = 100;
 	private final int CUBIE_SIZE = 200;
 
 	private Cube cube;
 	private PShape cubeShape;
 
-	private ArrayList<Move> moveList;
+	private ArrayList<MoveList> moveLists;
 
 	private Move move;
 	private int step;
+
+	private int MAX_STEPS = 75;
 	
 
 	public ProcessingRenderer() {
@@ -50,9 +72,9 @@ public class ProcessingRenderer extends PApplet {
 	@Override
 	public void setup() {
 		new PeasyCam(this, 1000);
-		moveList = new ArrayList<>();
+		moveLists = new ArrayList<>();
 		move = Move.NONE;
-		step = 0;
+		step = 1;
 		cube = Cube.Solved();
 		drawCube(cube);
 	}
@@ -66,6 +88,8 @@ public class ProcessingRenderer extends PApplet {
 		background(120);
 
 		makeMove();
+		drawCube(cube);
+		step = (step + 1) % MAX_STEPS;
 		shape(cubeShape);
 	}
 
@@ -73,23 +97,34 @@ public class ProcessingRenderer extends PApplet {
 		if (step == 0) {
 			cube.move(move);
 
- 			if (moveList.size() == 0) {
+			if (moveLists.size() == 0) {
 				move = Move.NONE;
-				drawCube(cube);
 				return;
 			}
 
-			move = moveList.get(0);
-			moveList.remove(0);
+			if (moveLists.get(0).isEmpty()){
+				moveLists.remove(0);
+
+				if (moveLists.size() == 0) {
+					move = Move.NONE;
+					MAX_STEPS = 75;
+					return;
+				}
+
+				MAX_STEPS = moveLists.get(0).maxSteps;
+			}
+
+			move = moveLists.get(0).getNext();
 		}
 
-		drawCube(cube);
-		step = (step + 1) % MAX_STEPS;
 	}
 
-	public void addMoves(ArrayList<Move> moves) {
+	public void addMoves(ArrayList<Move> moves, int maxSteps) {
 		printMoves(moves);
-		moveList.addAll(moves);
+		if(maxSteps <= 0) maxSteps = 75;
+		if (moveLists.size() == 0) 	MAX_STEPS = maxSteps;
+
+		moveLists.add(new MoveList(moves, maxSteps));
 	}
 
 	private void printMoves(ArrayList<Move> moves) {

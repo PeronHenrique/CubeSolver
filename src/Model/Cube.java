@@ -262,8 +262,8 @@ public class Cube {
      * 
      * @param ind A corner index.
      */
-    public int getCornerIndex(Corner corner) {
-        byte[] cornerFaces = getCubieFaces(getCornerColors(corner));
+    public Corner getCornerIndex(Corner position) {
+        byte[] cornerFaces = getCubieFaces(getCornerColors(position));
 
         // The colors range from 0 to 5, per RubiksCube.h.
         // Shifting 1 left by 0...5 gives 1, 2, 4, 8, 16, 32.
@@ -273,23 +273,22 @@ public class Cube {
 
         switch (codex) {
             default:
-                return 0;
             case 19:
-                return 0;
+                return Corner.ULB;
             case 25:
-                return 1;
+                return Corner.URB;
             case 13:
-                return 2;
+                return Corner.URF;
             case 7:
-                return 3;
+                return Corner.ULF;
             case 50:
-                return 4;
+                return Corner.DLB;
             case 56:
-                return 5;
+                return Corner.DRB;
             case 44:
-                return 6;
+                return Corner.DRF;
             case 38:
-                return 7;
+                return Corner.DLF;
         }
     }
 
@@ -303,13 +302,13 @@ public class Cube {
      * Orientation 2: The piece is rotated counterclockwise form its nearest up
      * or down face.
      */
-    public int getCornerOrientation(Corner index) {
-        byte[] corner = getCornerColors(index);
+    public int getCornerOrientation(Corner position) {
+        byte[] corner = getCornerColors(position);
 
         if (corner[0] == centers[0] || corner[0] == centers[5])
             return 0;
 
-        switch (index) {
+        switch (position) {
             default:
             case ULB:
             case URF:
@@ -329,10 +328,10 @@ public class Cube {
      * Given two face colors, return a unique index for an edge cubie. The index
      * will be [0..11].
      * 
-     * @param edge An edge index.
+     * @param position An edge index.
      */
-    public int getEdgeIndex(Edge edge) {
-        byte[] edgeFaces = getCubieFaces(getEdgeColors(edge));
+    public Edge getEdgeIndex(Edge position) {
+        byte[] edgeFaces = getCubieFaces(getEdgeColors(position));
 
         // The colors range from 0 to 5, per RubiksCube.h.
         // Shifting 1 left by 0...5 gives 1, 2, 4, 8, 16, 32.
@@ -342,29 +341,29 @@ public class Cube {
         switch (codex) {
             default:
             case 17:
-                return 0;
+                return Edge.UB;
             case 9:
-                return 1;
+                return Edge.UR;
             case 5:
-                return 2;
+                return Edge.UF;
             case 3:
-                return 3;
+                return Edge.UL;
             case 18:
-                return 4;
+                return Edge.BL;
             case 24:
-                return 5;
+                return Edge.BR;
             case 12:
-                return 6;
+                return Edge.FR;
             case 6:
-                return 7;
+                return Edge.FL;
             case 48:
-                return 8;
+                return Edge.DB;
             case 40:
-                return 9;
+                return Edge.DR;
             case 36:
-                return 10;
+                return Edge.DF;
             case 34:
-                return 11;
+                return Edge.DL;
         }
     }
 
@@ -379,15 +378,14 @@ public class Cube {
      *
      * See:
      * https://stackoverflow.com/questions/17305071/how-can-i-determine-optimally-if-an-edge-is-correctly-oriented-on-the-rubiks-cu
-     * See: http://cube.crider.co.uk/zz.php?p=eoline#eo_detection
      *
-     * @param edge An edge.
+     * @param position An edge.
      */
-    public int getEdgeOrientation(Edge edge) {
+    public int getEdgeOrientation(Edge position) {
         // The first index in this edge is the up or down color for edges in
         // the up or down layer (M or S slice), or the front or back color for
         // edges in the middle layer (E slice).
-        byte[] edgeColors = getEdgeColors(edge);
+        byte[] edgeColors = getEdgeColors(position);
 
         // If the first sticker is the L or R color, it's bad.
         if (edgeColors[0] == centers[1] || edgeColors[0] == centers[3])
