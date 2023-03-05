@@ -12,27 +12,20 @@ public class Solver implements Runnable {
 
     private Cube cube;
     private ProcessingRenderer renderer;
-    private Corner[] corners;
-    private int[] cornerOrientation;
-    private Edge[] edges;
-    private int[] edgeOrientation;
-    private final int scrambleSpeed = 1;
-    private final int solveSpeed = 1;
+    private final int scrambleSpeed = 15;
+    private final int solveSpeed = 50;
 
     public Solver(ProcessingRenderer renderer) {
         this.renderer = renderer;
-        cube = Cube.Solved();
-        corners = new Corner[8];
-        cornerOrientation = new int[8];
-        edges = new Edge[12];
-        edgeOrientation = new int[12];
+        this.cube = Cube.Solved();
     }
 
     @Override
     public void run() {
         System.out.println("Scramble:");
         scrambleCube(20);
-        // makeMoves("R2 L2 D2 L' F R' U L2 F' B L' B D2 F L2 B' F U2 D F'", scrambleSpeed);
+        // makeMoves("R2 L2 D2 L' F R' U L2 F' B L' B D2 F L2 B' F U2 D F'",
+        // scrambleSpeed);
         System.out.println("\nReorienting:");
         makeMoves("y z2", scrambleSpeed);
         solveCube();
@@ -60,66 +53,39 @@ public class Solver implements Runnable {
         renderer.addMoves(scramble, scrambleSpeed);
     }
 
-    private void updateCube() {
-        for (int i = 0; i < 8; i++) {
-            corners[i] = cube.getCornerIndex(Corner.getByIndex(i));
-            cornerOrientation[i] = cube.getCornerOrientation(Corner.getByIndex(i));
-        }
-
-        for (int i = 0; i < 12; i++) {
-            edges[i] = cube.getEdgeIndex(Edge.getByIndex(i));
-            edgeOrientation[i] = cube.getEdgeOrientation(Edge.getByIndex(i));
-        }
-    }
-
-    private int getCornerPosition(Corner corner) {
-        for (int i = 0; i < 8; i++) {
-            if (corners[i] == corner)
-                return i;
-        }
-
-        return -1;
-    }
-
-    private int getEdgePosition(Edge edge) {
-        for (int i = 0; i < 12; i++) {
-            if (edges[i] == edge)
-                return i;
-        }
-
-        return -1;
-    }
-
     private void solveCube() {
-        // TODO: solve cube
         System.out.println("\nCross:");
         solveCross();
+
         System.out.println("\nF2L:");
         solveF2L();
+
+        System.out.println("\nOLL:");
+        solveOLL();
+        // TODO: solve LL
     }
 
     private void solveCross() {
         for (int i = 0; i < 4; i++) {
-            makeMoves("y", solveSpeed);
-            updateCube();
-            int position = getEdgePosition(Edge.DF);
-            System.out.println("\n" + (position * 2 + edgeOrientation[position]));
-            makeMoves(Algs.cross[position * 2 + edgeOrientation[position]], solveSpeed);
+            if (i != 0)
+                makeMoves("y", solveSpeed);
+            int position = cube.getEdgePosition(Edge.DF);
+            // System.out.println("\n" + (position * 2 + edgeOrientation[position]));
+            makeMoves(Algs.cross[position * 2 + cube.edgeOrientation[position]], solveSpeed);
         }
     }
 
     private void solveF2L() {
         for (int i = 0; i < 4; i++) {
-            makeMoves("y", solveSpeed);
-            updateCube();
+            if (i != 0)
+                makeMoves("y", solveSpeed);
             setupF2L();
-            updateCube();
             makeMoves(Algs.F2L[calculateF2Lindex()], solveSpeed);
         }
     }
 
     private void setupF2L() {
-        int cornerPosition = getCornerPosition(Corner.DRF);
+        int cornerPosition = cube.getCornerPosition(Corner.DRF);
 
         if (cornerPosition < 4) {
             if (cornerPosition == 0)
@@ -144,8 +110,7 @@ public class Solver implements Runnable {
                 makeMoves("L' U' L", solveSpeed);
         }
 
-        updateCube();
-        int edgePosition = getEdgePosition(Edge.FR);
+        int edgePosition = cube.getEdgePosition(Edge.FR);
 
         if (edgePosition >= 4) {
             if (edgePosition == 4)
@@ -163,8 +128,32 @@ public class Solver implements Runnable {
     }
 
     private int calculateF2Lindex() {
-        int edgePosition = getEdgePosition(Edge.FR);
-        System.out.println("\n" + (6 * edgePosition + 3 * edgeOrientation[edgePosition] + cornerOrientation[2]));
-        return 6 * edgePosition + 3 * edgeOrientation[edgePosition] + cornerOrientation[2];
+        int edgePosition = cube.getEdgePosition(Edge.FR);
+        // System.out.println("\n" + (6 * edgePosition + 3 *
+        // edgeOrientation[edgePosition] + cornerOrientation[2]));
+        return 6 * edgePosition + 3 * cube.edgeOrientation[edgePosition] + cube.cornerOrientation[2];
+    }
+
+    private void solveOLL() {
+    }
+
+    private int calculatOLLindex() {
+        int codex = 0;
+        int index = 0;
+
+        codex = (cube.edgeOrientation[0] << 0) + (cube.edgeOrientation[1] << 2) +
+                (cube.edgeOrientation[2] << 4) + (cube.edgeOrientation[3] << 6) +
+                (cube.cornerOrientation[0] << 8) + (cube.cornerOrientation[1] << 10) +
+                (cube.cornerOrientation[2] << 12) + (cube.cornerOrientation[3] << 14);
+
+        switch (codex) {
+            default:
+            case 0:
+                index = 0;
+                break;
+        }
+
+        System.out.println("\n" + index);
+        return index;
     }
 }

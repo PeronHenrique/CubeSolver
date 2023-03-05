@@ -6,7 +6,17 @@ public class Cube {
     private byte[] stickers;
     private byte[] centers;
 
+    
+    public Corner[] corners;
+    public int[] cornerOrientation;
+    public Edge[] edges;
+    public int[] edgeOrientation;
+
     private Cube() {
+        this.corners = new Corner[8];
+        this.cornerOrientation = new int[8];
+        this.edges = new Edge[12];
+        this.edgeOrientation = new int[12];
     }
 
     public void move(Move move) {
@@ -142,6 +152,8 @@ public class Cube {
             case NONE:
                 break;
         }
+        
+        this.update();
     }
 
     /**
@@ -400,6 +412,40 @@ public class Cube {
         // Otherwise it's good.
         return 0;
     }
+
+
+
+    private void update() {
+        for (int i = 0; i < 8; i++) {
+            this.corners[i] = this.getCornerIndex(Corner.getByIndex(i));
+            this.cornerOrientation[i] = this.getCornerOrientation(Corner.getByIndex(i));
+        }
+
+        for (int i = 0; i < 12; i++) {
+            this.edges[i] = this.getEdgeIndex(Edge.getByIndex(i));
+            this.edgeOrientation[i] = this.getEdgeOrientation(Edge.getByIndex(i));
+        }
+    }
+
+    public int getCornerPosition(Corner index) {
+        for (int i = 0; i < 8; i++) {
+            if (this.corners[i] == index)
+                return i;
+        }
+
+        return -1;
+    }
+
+    public int getEdgePosition(Edge index) {
+        for (int i = 0; i < 12; i++) {
+            if (this.edges[i] == index)
+                return i;
+        }
+
+        return -1;
+    }
+
+
 
     public static Cube Solved() {
         Cube cube = new Cube();
