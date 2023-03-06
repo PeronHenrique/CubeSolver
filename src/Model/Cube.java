@@ -6,15 +6,15 @@ public class Cube {
     private byte[] stickers;
     private byte[] centers;
 
-    public Corner[] corners;
+    public int[] corners;
     public int[] cornerOrientation;
-    public Edge[] edges;
+    public int[] edges;
     public int[] edgeOrientation;
 
     private Cube() {
-        this.corners = new Corner[8];
+        this.corners = new int[8];
         this.cornerOrientation = new int[8];
-        this.edges = new Edge[12];
+        this.edges = new int[12];
         this.edgeOrientation = new int[12];
     }
 
@@ -328,7 +328,7 @@ public class Cube {
      * 
      * @param ind A corner index.
      */
-    public Corner getCornerIndex(Corner position) {
+    public int getCornerIndex(Corner position) {
         byte[] cornerFaces = getCubieFaces(getCornerColors(position));
 
         // The colors range from 0 to 5, per RubiksCube.h.
@@ -339,22 +339,23 @@ public class Cube {
 
         switch (codex) {
             default:
+                return -1;
             case 19:
-                return Corner.ULB;
+                return Corner.ULB.ordinal();
             case 25:
-                return Corner.URB;
+                return Corner.URB.ordinal();
             case 13:
-                return Corner.URF;
+                return Corner.URF.ordinal();
             case 7:
-                return Corner.ULF;
+                return Corner.ULF.ordinal();
             case 50:
-                return Corner.DLB;
+                return Corner.DLB.ordinal();
             case 56:
-                return Corner.DRB;
+                return Corner.DRB.ordinal();
             case 44:
-                return Corner.DRF;
+                return Corner.DRF.ordinal();
             case 38:
-                return Corner.DLF;
+                return Corner.DLF.ordinal();
         }
     }
 
@@ -376,6 +377,7 @@ public class Cube {
 
         switch (position) {
             default:
+                return -1;
             case ULB:
             case URF:
             case DLF:
@@ -396,7 +398,7 @@ public class Cube {
      * 
      * @param position An edge index.
      */
-    public Edge getEdgeIndex(Edge position) {
+    public int getEdgeIndex(Edge position) {
         byte[] edgeFaces = getCubieFaces(getEdgeColors(position));
 
         // The colors range from 0 to 5, per RubiksCube.h.
@@ -406,30 +408,31 @@ public class Cube {
 
         switch (codex) {
             default:
+            return -1;
             case 17:
-                return Edge.UB;
+                return Edge.UB.ordinal();
             case 9:
-                return Edge.UR;
+                return Edge.UR.ordinal();
             case 5:
-                return Edge.UF;
+                return Edge.UF.ordinal();
             case 3:
-                return Edge.UL;
+                return Edge.UL.ordinal();
             case 18:
-                return Edge.BL;
+                return Edge.BL.ordinal();
             case 24:
-                return Edge.BR;
+                return Edge.BR.ordinal();
             case 12:
-                return Edge.FR;
+                return Edge.FR.ordinal();
             case 6:
-                return Edge.FL;
+                return Edge.FL.ordinal();
             case 48:
-                return Edge.DB;
+                return Edge.DB.ordinal();
             case 40:
-                return Edge.DR;
+                return Edge.DR.ordinal();
             case 36:
-                return Edge.DF;
+                return Edge.DF.ordinal();
             case 34:
-                return Edge.DL;
+                return Edge.DL.ordinal();
         }
     }
 
@@ -481,7 +484,7 @@ public class Cube {
 
     public int getCornerPosition(Corner index) {
         for (int i = 0; i < 8; i++) {
-            if (this.corners[i] == index)
+            if (this.corners[i] == index.ordinal())
                 return i;
         }
 
@@ -490,7 +493,7 @@ public class Cube {
 
     public int getEdgePosition(Edge index) {
         for (int i = 0; i < 12; i++) {
-            if (this.edges[i] == index)
+            if (this.edges[i] == index.ordinal())
                 return i;
         }
 
