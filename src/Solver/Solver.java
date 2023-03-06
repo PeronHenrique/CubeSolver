@@ -48,6 +48,7 @@ public class Solver implements Runnable {
         // TODO: optimize wide moves, cube rotations, setup...
     }
 
+
     private void makeMoves(String algorithm, int maxStep) {
         algorithm = algorithm.replace("r", "RW");
         algorithm = algorithm.replace("l", "LW");
