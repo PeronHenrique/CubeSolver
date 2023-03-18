@@ -19,8 +19,8 @@ public class Solver implements Runnable {
     }
 
     private final String testScramble = "";
-    private final int scrambleSpeed = 1;
-    private final int solveSpeed = 1;
+    private final int scrambleSpeed = 0;
+    private final int solveSpeed = 0;
 
     @Override
     public void run() {
@@ -40,14 +40,13 @@ public class Solver implements Runnable {
         solveF2L();
 
         System.out.println("\nOLL:");
-        solveOLL();
+        makeMoves(SolverTables.getMovesOLL(cube), solveSpeed);
 
         System.out.println("\nPLL:");
-        solvePLL();
+        makeMoves(SolverTables.getMovesPLL(cube), solveSpeed);
 
         // TODO: optimize wide moves, cube rotations, setup...
     }
-
 
     private void makeMoves(String algorithm, int maxStep) {
         algorithm = algorithm.replace("r", "RW");
@@ -84,7 +83,6 @@ public class Solver implements Runnable {
             if (i != 0)
                 makeMoves("y", solveSpeed);
             int position = cube.getEdgePosition(Edge.DF);
-            // System.out.println("\n" + (position * 2 + edgeOrientation[position]));
             makeMoves(SolverTables.cross[position * 2 + cube.edgeOrientation[position]], solveSpeed);
         }
     }
@@ -150,17 +148,7 @@ public class Solver implements Runnable {
 
     private int calculateF2Lindex() {
         int edgePosition = cube.getEdgePosition(Edge.FR);
-        // System.out.println("\n" + (6 * edgePosition + 3 *
-        // edgeOrientation[edgePosition] + cornerOrientation[2]));
         return 6 * edgePosition + 3 * cube.edgeOrientation[edgePosition] + cube.cornerOrientation[2];
-    }
-
-    private void solveOLL() {
-        makeMoves(SolverTables.getMovesOLL(cube), solveSpeed);
-    }
-
-    private void solvePLL() {
-        makeMoves(SolverTables.getMovesPLL(cube), solveSpeed);
     }
 
 }
