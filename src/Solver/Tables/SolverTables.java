@@ -1,4 +1,4 @@
-package Solver;
+package Solver.Tables;
 
 import Model.Corner;
 import Model.Cube;

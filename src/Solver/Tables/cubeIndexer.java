@@ -1,4 +1,4 @@
-package Indexers;
+package Solver.Tables;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -8,9 +8,11 @@ import Model.Corner;
 import Model.Cube;
 import Model.Edge;
 import Model.Move;
-import Solver.SolverTables;
 
 public class cubeIndexer {
+    //TODO: separate Tables
+    //TODO: F2L Table
+    //TODO: ZBLL Table
 
     private static void makeMoves(String algorithm, Cube cube) {
         algorithm = algorithm.replace("r", "RW");

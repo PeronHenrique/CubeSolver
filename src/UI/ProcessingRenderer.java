@@ -11,32 +11,11 @@ import Model.Cube;
 import Model.Edge;
 import Model.Face;
 import Model.Move;
+import Solver.CFOPSolver;
+import Solver.Solver;
 import peasy.*;
 
 public class ProcessingRenderer extends PApplet {
-
-	private class MoveList {
-		public ArrayList<Move> moves = new ArrayList<>();
-		public int maxSteps = 75;
-
-		public MoveList(ArrayList<Move> moves, int maxSteps) {
-			this.maxSteps = maxSteps;
-			this.moves = moves;
-		}
-
-		public Move getNext() {
-			if (moves.size() == 0)
-				return Move.NONE;
-
-			Move move = moves.get(0);
-			moves.remove(0);
-			return move;
-		}
-
-		public boolean isEmpty() {
-			return moves.size() == 0;
-		}
-	}
 
 	private final COLOR cubeColors[] = {
 			COLOR.YELLOW,
@@ -47,18 +26,17 @@ public class ProcessingRenderer extends PApplet {
 			COLOR.WHITE,
 	};
 
-	private final int HALF_CUBIE_SIZE = 100;
-	private final int CUBIE_SIZE = 200;
+	private final int HALF_CUBIE_SIZE = 50;
+	private final int CUBIE_SIZE = 100;
+	private final int CUBE_SPACING = 600;
 
-	private Cube cube;
-	private PShape cubeShape;
+	private final int MAX_STEPS = 30;
 
-	private ArrayList<MoveList> moveLists;
+	private ArrayList<SolverContainer> solvers;
 
-	private Move move;
+	private final String testScramble = "";
+
 	private int step;
-
-	private int MAX_STEPS = 75;
 
 	public ProcessingRenderer() {
 		PApplet.runSketch(new String[] { "Cube Solver" }, this);
@@ -72,118 +50,102 @@ public class ProcessingRenderer extends PApplet {
 	@Override
 	public void setup() {
 		new PeasyCam(this, 1000);
-		moveLists = new ArrayList<>();
-		move = Move.NONE;
 		step = 1;
-		cube = Cube.Solved();
-		drawCube(cube);
+
+		solvers = new ArrayList<>();
+
+		for (int i = 0; i < 9; i++) {
+			String scramble;
+			if ("".equals(testScramble))
+				scramble = Move.getRandomMoves(20);
+			else
+				scramble = testScramble;
+
+
+			CFOPSolver cfop = new CFOPSolver(this, scramble);
+			solvers.add(new SolverContainer(cfop, scramble));
+		}
+
+		drawCubes();
+	}
+
+	public void setSolution(Solver solver, String solution) {
+		for (SolverContainer sc : solvers) {
+			if (sc.getSolver() == solver)
+				sc.setSolution(solution);
+		}
 	}
 
 	@Override
 	public void draw() {
-		rotateX(-.5f);
-		rotateY(-.5f);
-		scale(0.85f);
+		translate(-720, -720, -1000);
+		// rotateX(-.4f);
+		// rotateY(-.4f);
 
 		background(120);
 
-		makeMove();
-		drawCube(cube);
+		drawCubes();
 		step = (step + 1) % MAX_STEPS;
-		shape(cubeShape);
 	}
 
-	private void makeMove() {
-		if (step == 0) {
-			cube.move(move);
+	private void drawCubes() {
 
-			if (moveLists.size() == 0) {
-				move = Move.NONE;
-				return;
+		int index = 0;
+
+		for (SolverContainer sc : solvers) {
+			pushMatrix();
+			translate((index % 3) * CUBE_SPACING, (index / 3) * CUBE_SPACING);
+
+			if (step == 0) {
+				sc.getCube().move(sc.getMove());
+				sc.getNextMove();
 			}
 
-			if (moveLists.get(0).isEmpty()) {
-				moveLists.remove(0);
+			shape(drawCube(sc.getCube(), sc.getMove()));
+			index++;
 
-				if (moveLists.size() == 0) {
-					move = Move.NONE;
-					MAX_STEPS = 75;
-					return;
-				}
-
-				MAX_STEPS = moveLists.get(0).maxSteps;
-			}
-
-			move = moveLists.get(0).getNext();
+			popMatrix();
 		}
 
 	}
 
-	public void addMoves(ArrayList<Move> moves, int maxSteps) {
-		printMoves(moves);
-		if (maxSteps <= 0)
-			maxSteps = 75;
-		if (moveLists.size() == 0)
-			MAX_STEPS = maxSteps;
-
-		moveLists.add(new MoveList(moves, maxSteps));
-	}
-
-	private void printMoves(ArrayList<Move> moves) {
-		String s = "";
-		for (Move move : moves)
-			s += move.name() + " ";
-
-		s = s.replace("_", "'");
-		s = s.replace("X", "x");
-		s = s.replace("Y", "y");
-		s = s.replace("Z", "z");
-		s = s.replace("RW", "r");
-		s = s.replace("LW", "l");
-		s = s.replace("UW", "u");
-		s = s.replace("DW", "d");
-		s = s.replace("BW", "b");
-		s = s.replace("FW", "f");
-		System.out.println(s);
-	}
-
-	private void drawCube(Cube cube) {
-		cubeShape = createShape(GROUP);
+	private PShape drawCube(Cube cube, Move move) {
+		PShape cubeShape = createShape(GROUP);
 
 		if (cube == null)
-			return;
+			return cubeShape;
 
-		drawCenter(cube.getCenterColors(Face.U), Face.U);
-		drawCenter(cube.getCenterColors(Face.B), Face.B);
-		drawCenter(cube.getCenterColors(Face.R), Face.R);
-		drawCenter(cube.getCenterColors(Face.F), Face.F);
-		drawCenter(cube.getCenterColors(Face.L), Face.L);
-		drawCenter(cube.getCenterColors(Face.D), Face.D);
+		drawCenter(cube.getCenterColors(Face.U), Face.U, cubeShape, move);
+		drawCenter(cube.getCenterColors(Face.B), Face.B, cubeShape, move);
+		drawCenter(cube.getCenterColors(Face.R), Face.R, cubeShape, move);
+		drawCenter(cube.getCenterColors(Face.F), Face.F, cubeShape, move);
+		drawCenter(cube.getCenterColors(Face.L), Face.L, cubeShape, move);
+		drawCenter(cube.getCenterColors(Face.D), Face.D, cubeShape, move);
+		drawEdge(cube.getEdgeColors(Edge.UB), Edge.UB, cubeShape, move);
+		drawEdge(cube.getEdgeColors(Edge.UR), Edge.UR, cubeShape, move);
+		drawEdge(cube.getEdgeColors(Edge.UF), Edge.UF, cubeShape, move);
+		drawEdge(cube.getEdgeColors(Edge.UL), Edge.UL, cubeShape, move);
+		drawEdge(cube.getEdgeColors(Edge.FR), Edge.FR, cubeShape, move);
+		drawEdge(cube.getEdgeColors(Edge.FL), Edge.FL, cubeShape, move);
+		drawEdge(cube.getEdgeColors(Edge.BL), Edge.BL, cubeShape, move);
+		drawEdge(cube.getEdgeColors(Edge.BR), Edge.BR, cubeShape, move);
+		drawEdge(cube.getEdgeColors(Edge.DB), Edge.DB, cubeShape, move);
+		drawEdge(cube.getEdgeColors(Edge.DR), Edge.DR, cubeShape, move);
+		drawEdge(cube.getEdgeColors(Edge.DF), Edge.DF, cubeShape, move);
+		drawEdge(cube.getEdgeColors(Edge.DL), Edge.DL, cubeShape, move);
+		drawCorner(cube.getCornerColors(Corner.ULB), Corner.ULB, cubeShape, move);
+		drawCorner(cube.getCornerColors(Corner.URB), Corner.URB, cubeShape, move);
+		drawCorner(cube.getCornerColors(Corner.URF), Corner.URF, cubeShape, move);
+		drawCorner(cube.getCornerColors(Corner.ULF), Corner.ULF, cubeShape, move);
+		drawCorner(cube.getCornerColors(Corner.DLB), Corner.DLB, cubeShape, move);
+		drawCorner(cube.getCornerColors(Corner.DRB), Corner.DRB, cubeShape, move);
+		drawCorner(cube.getCornerColors(Corner.DRF), Corner.DRF, cubeShape, move);
+		drawCorner(cube.getCornerColors(Corner.DLF), Corner.DLF, cubeShape, move);
 
-		drawEdge(cube.getEdgeColors(Edge.UB), Edge.UB);
-		drawEdge(cube.getEdgeColors(Edge.UR), Edge.UR);
-		drawEdge(cube.getEdgeColors(Edge.UF), Edge.UF);
-		drawEdge(cube.getEdgeColors(Edge.UL), Edge.UL);
-		drawEdge(cube.getEdgeColors(Edge.FR), Edge.FR);
-		drawEdge(cube.getEdgeColors(Edge.FL), Edge.FL);
-		drawEdge(cube.getEdgeColors(Edge.BL), Edge.BL);
-		drawEdge(cube.getEdgeColors(Edge.BR), Edge.BR);
-		drawEdge(cube.getEdgeColors(Edge.DB), Edge.DB);
-		drawEdge(cube.getEdgeColors(Edge.DR), Edge.DR);
-		drawEdge(cube.getEdgeColors(Edge.DF), Edge.DF);
-		drawEdge(cube.getEdgeColors(Edge.DL), Edge.DL);
-
-		drawCorner(cube.getCornerColors(Corner.ULB), Corner.ULB);
-		drawCorner(cube.getCornerColors(Corner.URB), Corner.URB);
-		drawCorner(cube.getCornerColors(Corner.URF), Corner.URF);
-		drawCorner(cube.getCornerColors(Corner.ULF), Corner.ULF);
-		drawCorner(cube.getCornerColors(Corner.DLB), Corner.DLB);
-		drawCorner(cube.getCornerColors(Corner.DRB), Corner.DRB);
-		drawCorner(cube.getCornerColors(Corner.DRF), Corner.DRF);
-		drawCorner(cube.getCornerColors(Corner.DLF), Corner.DLF);
+		return cubeShape;
 	}
 
-	private void drawCenter(byte[] colorIndexes, Face position) {
+	private void drawCenter(byte[] colorIndexes, Face position, PShape cubeShape, Move move) {
 		COLOR[] colors = new COLOR[] {
 				COLOR.BLACK, COLOR.BLACK, COLOR.BLACK,
 				COLOR.BLACK, COLOR.BLACK, COLOR.BLACK };
@@ -191,112 +153,112 @@ public class ProcessingRenderer extends PApplet {
 		PVector offset = new PVector();
 		PVector rotation = new PVector();
 
-		getXRotation(rotation);
-		getYRotation(rotation);
-		getZRotation(rotation);
+		getXRotation(rotation, move);
+		getYRotation(rotation, move);
+		getZRotation(rotation, move);
 
 		switch (position) {
 			case U:
 				colors[0] = cubeColors[colorIndexes[0]];
 				offset.add(0, -CUBIE_SIZE, 0);
 
-				getURotation(rotation);
+				getURotation(rotation, move);
 
-				getMRotation(rotation);
-				getSRotation(rotation);
+				getMRotation(rotation, move);
+				getSRotation(rotation, move);
 
-				getUWRotation(rotation);
-				getFWRotation(rotation);
-				getBWRotation(rotation);
-				getRWRotation(rotation);
-				getLWRotation(rotation);
+				getUWRotation(rotation, move);
+				getFWRotation(rotation, move);
+				getBWRotation(rotation, move);
+				getRWRotation(rotation, move);
+				getLWRotation(rotation, move);
 				break;
 
 			case L:
 				colors[1] = cubeColors[colorIndexes[0]];
 				offset.add(-CUBIE_SIZE, 0, 0);
 
-				getLRotation(rotation);
+				getLRotation(rotation, move);
 
-				getSRotation(rotation);
-				getERotation(rotation);
+				getSRotation(rotation, move);
+				getERotation(rotation, move);
 
-				getUWRotation(rotation);
-				getDWRotation(rotation);
-				getFWRotation(rotation);
-				getBWRotation(rotation);
-				getLWRotation(rotation);
+				getUWRotation(rotation, move);
+				getDWRotation(rotation, move);
+				getFWRotation(rotation, move);
+				getBWRotation(rotation, move);
+				getLWRotation(rotation, move);
 				break;
 
 			case F:
 				colors[2] = cubeColors[colorIndexes[0]];
 				offset.add(0, 0, CUBIE_SIZE);
 
-				getFRotation(rotation);
+				getFRotation(rotation, move);
 
-				getMRotation(rotation);
-				getERotation(rotation);
+				getMRotation(rotation, move);
+				getERotation(rotation, move);
 
-				getUWRotation(rotation);
-				getDWRotation(rotation);
-				getFWRotation(rotation);
-				getRWRotation(rotation);
-				getLWRotation(rotation);
+				getUWRotation(rotation, move);
+				getDWRotation(rotation, move);
+				getFWRotation(rotation, move);
+				getRWRotation(rotation, move);
+				getLWRotation(rotation, move);
 				break;
 
 			case R:
 				colors[3] = cubeColors[colorIndexes[0]];
 				offset.add(CUBIE_SIZE, 0, 0);
 
-				getRRotation(rotation);
+				getRRotation(rotation, move);
 
-				getSRotation(rotation);
-				getERotation(rotation);
+				getSRotation(rotation, move);
+				getERotation(rotation, move);
 
-				getUWRotation(rotation);
-				getDWRotation(rotation);
-				getFWRotation(rotation);
-				getBWRotation(rotation);
-				getRWRotation(rotation);
+				getUWRotation(rotation, move);
+				getDWRotation(rotation, move);
+				getFWRotation(rotation, move);
+				getBWRotation(rotation, move);
+				getRWRotation(rotation, move);
 				break;
 
 			case B:
 				colors[4] = cubeColors[colorIndexes[0]];
 				offset.add(0, 0, -CUBIE_SIZE);
 
-				getBRotation(rotation);
+				getBRotation(rotation, move);
 
-				getMRotation(rotation);
-				getERotation(rotation);
+				getMRotation(rotation, move);
+				getERotation(rotation, move);
 
-				getUWRotation(rotation);
-				getDWRotation(rotation);
-				getBWRotation(rotation);
-				getRWRotation(rotation);
-				getLWRotation(rotation);
+				getUWRotation(rotation, move);
+				getDWRotation(rotation, move);
+				getBWRotation(rotation, move);
+				getRWRotation(rotation, move);
+				getLWRotation(rotation, move);
 				break;
 
 			case D:
 				colors[5] = cubeColors[colorIndexes[0]];
 				offset.add(0, CUBIE_SIZE, 0);
 
-				getDRotation(rotation);
+				getDRotation(rotation, move);
 
-				getMRotation(rotation);
-				getSRotation(rotation);
+				getMRotation(rotation, move);
+				getSRotation(rotation, move);
 
-				getDWRotation(rotation);
-				getFWRotation(rotation);
-				getBWRotation(rotation);
-				getRWRotation(rotation);
-				getLWRotation(rotation);
+				getDWRotation(rotation, move);
+				getFWRotation(rotation, move);
+				getBWRotation(rotation, move);
+				getRWRotation(rotation, move);
+				getLWRotation(rotation, move);
 				break;
 		}
 
-		drawCubie(colors, offset, rotation);
+		drawCubie(colors, offset, rotation, cubeShape);
 	}
 
-	private void drawEdge(byte[] colorIndexes, Edge position) {
+	private void drawEdge(byte[] colorIndexes, Edge position, PShape cubeShape, Move move) {
 
 		COLOR[] colors = new COLOR[] {
 				COLOR.BLACK, COLOR.BLACK, COLOR.BLACK,
@@ -305,9 +267,9 @@ public class ProcessingRenderer extends PApplet {
 		PVector offset = new PVector();
 		PVector rotation = new PVector();
 
-		getXRotation(rotation);
-		getYRotation(rotation);
-		getZRotation(rotation);
+		getXRotation(rotation, move);
+		getYRotation(rotation, move);
+		getZRotation(rotation, move);
 
 		switch (position) {
 			case UB:
@@ -316,15 +278,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(0, -CUBIE_SIZE, -CUBIE_SIZE);
 
-				getURotation(rotation);
-				getBRotation(rotation);
+				getURotation(rotation, move);
+				getBRotation(rotation, move);
 
-				getMRotation(rotation);
+				getMRotation(rotation, move);
 
-				getUWRotation(rotation);
-				getBWRotation(rotation);
-				getRWRotation(rotation);
-				getLWRotation(rotation);
+				getUWRotation(rotation, move);
+				getBWRotation(rotation, move);
+				getRWRotation(rotation, move);
+				getLWRotation(rotation, move);
 				break;
 
 			case UR:
@@ -333,15 +295,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, -CUBIE_SIZE, 0);
 
-				getURotation(rotation);
-				getRRotation(rotation);
+				getURotation(rotation, move);
+				getRRotation(rotation, move);
 
-				getSRotation(rotation);
+				getSRotation(rotation, move);
 
-				getUWRotation(rotation);
-				getFWRotation(rotation);
-				getBWRotation(rotation);
-				getRWRotation(rotation);
+				getUWRotation(rotation, move);
+				getFWRotation(rotation, move);
+				getBWRotation(rotation, move);
+				getRWRotation(rotation, move);
 				break;
 
 			case UF:
@@ -350,15 +312,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(0, -CUBIE_SIZE, CUBIE_SIZE);
 
-				getURotation(rotation);
-				getFRotation(rotation);
+				getURotation(rotation, move);
+				getFRotation(rotation, move);
 
-				getMRotation(rotation);
+				getMRotation(rotation, move);
 
-				getUWRotation(rotation);
-				getFWRotation(rotation);
-				getRWRotation(rotation);
-				getLWRotation(rotation);
+				getUWRotation(rotation, move);
+				getFWRotation(rotation, move);
+				getRWRotation(rotation, move);
+				getLWRotation(rotation, move);
 				break;
 
 			case UL:
@@ -367,15 +329,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, -CUBIE_SIZE, 0);
 
-				getURotation(rotation);
-				getLRotation(rotation);
+				getURotation(rotation, move);
+				getLRotation(rotation, move);
 
-				getSRotation(rotation);
+				getSRotation(rotation, move);
 
-				getUWRotation(rotation);
-				getFWRotation(rotation);
-				getBWRotation(rotation);
-				getLWRotation(rotation);
+				getUWRotation(rotation, move);
+				getFWRotation(rotation, move);
+				getBWRotation(rotation, move);
+				getLWRotation(rotation, move);
 				break;
 
 			case BL:
@@ -384,15 +346,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, 0, -CUBIE_SIZE);
 
-				getLRotation(rotation);
-				getBRotation(rotation);
+				getLRotation(rotation, move);
+				getBRotation(rotation, move);
 
-				getERotation(rotation);
+				getERotation(rotation, move);
 
-				getUWRotation(rotation);
-				getDWRotation(rotation);
-				getBWRotation(rotation);
-				getLWRotation(rotation);
+				getUWRotation(rotation, move);
+				getDWRotation(rotation, move);
+				getBWRotation(rotation, move);
+				getLWRotation(rotation, move);
 				break;
 
 			case BR:
@@ -401,15 +363,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, 0, -CUBIE_SIZE);
 
-				getRRotation(rotation);
-				getBRotation(rotation);
+				getRRotation(rotation, move);
+				getBRotation(rotation, move);
 
-				getERotation(rotation);
+				getERotation(rotation, move);
 
-				getUWRotation(rotation);
-				getDWRotation(rotation);
-				getBWRotation(rotation);
-				getRWRotation(rotation);
+				getUWRotation(rotation, move);
+				getDWRotation(rotation, move);
+				getBWRotation(rotation, move);
+				getRWRotation(rotation, move);
 				break;
 
 			case FL:
@@ -418,15 +380,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, 0, CUBIE_SIZE);
 
-				getLRotation(rotation);
-				getFRotation(rotation);
+				getLRotation(rotation, move);
+				getFRotation(rotation, move);
 
-				getERotation(rotation);
+				getERotation(rotation, move);
 
-				getUWRotation(rotation);
-				getDWRotation(rotation);
-				getFWRotation(rotation);
-				getLWRotation(rotation);
+				getUWRotation(rotation, move);
+				getDWRotation(rotation, move);
+				getFWRotation(rotation, move);
+				getLWRotation(rotation, move);
 				break;
 
 			case FR:
@@ -435,15 +397,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, 0, CUBIE_SIZE);
 
-				getRRotation(rotation);
-				getFRotation(rotation);
+				getRRotation(rotation, move);
+				getFRotation(rotation, move);
 
-				getERotation(rotation);
+				getERotation(rotation, move);
 
-				getUWRotation(rotation);
-				getDWRotation(rotation);
-				getFWRotation(rotation);
-				getRWRotation(rotation);
+				getUWRotation(rotation, move);
+				getDWRotation(rotation, move);
+				getFWRotation(rotation, move);
+				getRWRotation(rotation, move);
 				break;
 
 			case DB:
@@ -452,15 +414,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(0, CUBIE_SIZE, -CUBIE_SIZE);
 
-				getDRotation(rotation);
-				getBRotation(rotation);
+				getDRotation(rotation, move);
+				getBRotation(rotation, move);
 
-				getMRotation(rotation);
+				getMRotation(rotation, move);
 
-				getDWRotation(rotation);
-				getBWRotation(rotation);
-				getRWRotation(rotation);
-				getLWRotation(rotation);
+				getDWRotation(rotation, move);
+				getBWRotation(rotation, move);
+				getRWRotation(rotation, move);
+				getLWRotation(rotation, move);
 				break;
 
 			case DR:
@@ -469,15 +431,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, CUBIE_SIZE, 0);
 
-				getDRotation(rotation);
-				getRRotation(rotation);
+				getDRotation(rotation, move);
+				getRRotation(rotation, move);
 
-				getSRotation(rotation);
+				getSRotation(rotation, move);
 
-				getDWRotation(rotation);
-				getFWRotation(rotation);
-				getBWRotation(rotation);
-				getRWRotation(rotation);
+				getDWRotation(rotation, move);
+				getFWRotation(rotation, move);
+				getBWRotation(rotation, move);
+				getRWRotation(rotation, move);
 				break;
 
 			case DF:
@@ -486,15 +448,15 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(0, CUBIE_SIZE, CUBIE_SIZE);
 
-				getDRotation(rotation);
-				getFRotation(rotation);
+				getDRotation(rotation, move);
+				getFRotation(rotation, move);
 
-				getMRotation(rotation);
+				getMRotation(rotation, move);
 
-				getDWRotation(rotation);
-				getFWRotation(rotation);
-				getRWRotation(rotation);
-				getLWRotation(rotation);
+				getDWRotation(rotation, move);
+				getFWRotation(rotation, move);
+				getRWRotation(rotation, move);
+				getLWRotation(rotation, move);
 				break;
 
 			case DL:
@@ -503,23 +465,23 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, CUBIE_SIZE, 0);
 
-				getDRotation(rotation);
-				getLRotation(rotation);
+				getDRotation(rotation, move);
+				getLRotation(rotation, move);
 
-				getSRotation(rotation);
+				getSRotation(rotation, move);
 
-				getDWRotation(rotation);
-				getFWRotation(rotation);
-				getBWRotation(rotation);
-				getLWRotation(rotation);
+				getDWRotation(rotation, move);
+				getFWRotation(rotation, move);
+				getBWRotation(rotation, move);
+				getLWRotation(rotation, move);
 				break;
 
 		}
 
-		drawCubie(colors, offset, rotation);
+		drawCubie(colors, offset, rotation, cubeShape);
 	}
 
-	private void drawCorner(byte[] colorIndexes, Corner position) {
+	private void drawCorner(byte[] colorIndexes, Corner position, PShape cubeShape, Move move) {
 
 		COLOR[] colors = new COLOR[] {
 				COLOR.BLACK, COLOR.BLACK, COLOR.BLACK,
@@ -528,9 +490,9 @@ public class ProcessingRenderer extends PApplet {
 		PVector offset = new PVector();
 		PVector rotation = new PVector();
 
-		getXRotation(rotation);
-		getYRotation(rotation);
-		getZRotation(rotation);
+		getXRotation(rotation, move);
+		getYRotation(rotation, move);
+		getZRotation(rotation, move);
 
 		switch (position) {
 			case ULB:
@@ -540,13 +502,13 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, -CUBIE_SIZE, -CUBIE_SIZE);
 
-				getURotation(rotation);
-				getLRotation(rotation);
-				getBRotation(rotation);
+				getURotation(rotation, move);
+				getLRotation(rotation, move);
+				getBRotation(rotation, move);
 
-				getUWRotation(rotation);
-				getBWRotation(rotation);
-				getLWRotation(rotation);
+				getUWRotation(rotation, move);
+				getBWRotation(rotation, move);
+				getLWRotation(rotation, move);
 				break;
 
 			case URB:
@@ -556,13 +518,13 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, -CUBIE_SIZE, -CUBIE_SIZE);
 
-				getURotation(rotation);
-				getRRotation(rotation);
-				getBRotation(rotation);
+				getURotation(rotation, move);
+				getRRotation(rotation, move);
+				getBRotation(rotation, move);
 
-				getUWRotation(rotation);
-				getRWRotation(rotation);
-				getBWRotation(rotation);
+				getUWRotation(rotation, move);
+				getRWRotation(rotation, move);
+				getBWRotation(rotation, move);
 				break;
 
 			case ULF:
@@ -572,13 +534,13 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, -CUBIE_SIZE, CUBIE_SIZE);
 
-				getURotation(rotation);
-				getLRotation(rotation);
-				getFRotation(rotation);
+				getURotation(rotation, move);
+				getLRotation(rotation, move);
+				getFRotation(rotation, move);
 
-				getUWRotation(rotation);
-				getLWRotation(rotation);
-				getFWRotation(rotation);
+				getUWRotation(rotation, move);
+				getLWRotation(rotation, move);
+				getFWRotation(rotation, move);
 				break;
 
 			case URF:
@@ -588,13 +550,13 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, -CUBIE_SIZE, CUBIE_SIZE);
 
-				getURotation(rotation);
-				getRRotation(rotation);
-				getFRotation(rotation);
+				getURotation(rotation, move);
+				getRRotation(rotation, move);
+				getFRotation(rotation, move);
 
-				getUWRotation(rotation);
-				getRWRotation(rotation);
-				getFWRotation(rotation);
+				getUWRotation(rotation, move);
+				getRWRotation(rotation, move);
+				getFWRotation(rotation, move);
 				break;
 
 			case DLB:
@@ -604,13 +566,13 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, CUBIE_SIZE, -CUBIE_SIZE);
 
-				getDRotation(rotation);
-				getLRotation(rotation);
-				getBRotation(rotation);
+				getDRotation(rotation, move);
+				getLRotation(rotation, move);
+				getBRotation(rotation, move);
 
-				getDWRotation(rotation);
-				getLWRotation(rotation);
-				getBWRotation(rotation);
+				getDWRotation(rotation, move);
+				getLWRotation(rotation, move);
+				getBWRotation(rotation, move);
 				break;
 
 			case DRB:
@@ -620,13 +582,13 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, CUBIE_SIZE, -CUBIE_SIZE);
 
-				getDRotation(rotation);
-				getRRotation(rotation);
-				getBRotation(rotation);
+				getDRotation(rotation, move);
+				getRRotation(rotation, move);
+				getBRotation(rotation, move);
 
-				getDWRotation(rotation);
-				getRWRotation(rotation);
-				getBWRotation(rotation);
+				getDWRotation(rotation, move);
+				getRWRotation(rotation, move);
+				getBWRotation(rotation, move);
 				break;
 
 			case DLF:
@@ -636,13 +598,13 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(-CUBIE_SIZE, CUBIE_SIZE, CUBIE_SIZE);
 
-				getDRotation(rotation);
-				getLRotation(rotation);
-				getFRotation(rotation);
+				getDRotation(rotation, move);
+				getLRotation(rotation, move);
+				getFRotation(rotation, move);
 
-				getDWRotation(rotation);
-				getLWRotation(rotation);
-				getFWRotation(rotation);
+				getDWRotation(rotation, move);
+				getLWRotation(rotation, move);
+				getFWRotation(rotation, move);
 				break;
 
 			case DRF:
@@ -652,23 +614,23 @@ public class ProcessingRenderer extends PApplet {
 
 				offset.add(CUBIE_SIZE, CUBIE_SIZE, CUBIE_SIZE);
 
-				getDRotation(rotation);
-				getRRotation(rotation);
-				getFRotation(rotation);
+				getDRotation(rotation, move);
+				getRRotation(rotation, move);
+				getFRotation(rotation, move);
 
-				getDWRotation(rotation);
-				getRWRotation(rotation);
-				getFWRotation(rotation);
+				getDWRotation(rotation, move);
+				getRWRotation(rotation, move);
+				getFWRotation(rotation, move);
 				break;
 			default:
 				break;
 
 		}
 
-		drawCubie(colors, offset, rotation);
+		drawCubie(colors, offset, rotation, cubeShape);
 	}
 
-	private void drawCubie(COLOR[] colors, PVector offset, PVector rotation) {
+	private void drawCubie(COLOR[] colors, PVector offset, PVector rotation, PShape cubeShape) {
 		PShape cubie = createShape(GROUP);
 
 		cubie.addChild(getCubieUpFace(colors[0].getColor()));
@@ -758,7 +720,7 @@ public class ProcessingRenderer extends PApplet {
 		return temp;
 	}
 
-	private void getURotation(PVector rotation) {
+	private void getURotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.U)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -769,7 +731,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(0, -angle, 0);
 	}
 
-	private void getDRotation(PVector rotation) {
+	private void getDRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.D)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -780,7 +742,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(0, angle, 0);
 	}
 
-	private void getLRotation(PVector rotation) {
+	private void getLRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.L)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -791,7 +753,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(-angle, 0, 0);
 	}
 
-	private void getRRotation(PVector rotation) {
+	private void getRRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.R)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -802,7 +764,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(angle, 0, 0);
 	}
 
-	private void getBRotation(PVector rotation) {
+	private void getBRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.B)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -813,7 +775,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(0, 0, -angle);
 	}
 
-	private void getFRotation(PVector rotation) {
+	private void getFRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.F)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -824,7 +786,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(0, 0, angle);
 	}
 
-	private void getXRotation(PVector rotation) {
+	private void getXRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.X)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -835,7 +797,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(angle, 0, 0);
 	}
 
-	private void getYRotation(PVector rotation) {
+	private void getYRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.Y)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -846,7 +808,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(0, -angle, 0);
 	}
 
-	private void getZRotation(PVector rotation) {
+	private void getZRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.Z)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -857,7 +819,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(0, 0, angle);
 	}
 
-	private void getMRotation(PVector rotation) {
+	private void getMRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.M)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -868,7 +830,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(-angle, 0, 0);
 	}
 
-	private void getERotation(PVector rotation) {
+	private void getERotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.E)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -879,7 +841,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(0, angle, 0);
 	}
 
-	private void getSRotation(PVector rotation) {
+	private void getSRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.S)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -890,7 +852,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(0, 0, angle);
 	}
 
-	private void getUWRotation(PVector rotation) {
+	private void getUWRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.UW)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -901,7 +863,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(0, -angle, 0);
 	}
 
-	private void getDWRotation(PVector rotation) {
+	private void getDWRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.DW)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -912,7 +874,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(0, angle, 0);
 	}
 
-	private void getLWRotation(PVector rotation) {
+	private void getLWRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.LW)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -923,7 +885,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(-angle, 0, 0);
 	}
 
-	private void getRWRotation(PVector rotation) {
+	private void getRWRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.RW)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -934,7 +896,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(angle, 0, 0);
 	}
 
-	private void getBWRotation(PVector rotation) {
+	private void getBWRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.BW)
 			angle = radians((90 * step) / (float) (MAX_STEPS));
@@ -945,7 +907,7 @@ public class ProcessingRenderer extends PApplet {
 		rotation.add(0, 0, -angle);
 	}
 
-	private void getFWRotation(PVector rotation) {
+	private void getFWRotation(PVector rotation, Move move) {
 		float angle = 0;
 		if (move == Move.FW)
 			angle = radians((90 * step) / (float) (MAX_STEPS));

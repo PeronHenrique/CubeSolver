@@ -10,7 +10,7 @@ public enum Move {
     R, R_, R2,
     B, B_, B2,
     F, F_, F2,
-    NONE, 
+    NONE,
     X, X_, X2,
     Y, Y_, Y2,
     Z, Z_, Z2,
@@ -33,8 +33,7 @@ public enum Move {
         return Move.NONE;
     }
 
-    
-	public static Move getByName(String name) {
+    public static Move getByName(String name) {
         for (Move move : Move.values()) {
             if (move.name().equals(name))
                 return move;
@@ -43,20 +42,40 @@ public enum Move {
         return Move.NONE;
     }
 
-    public static ArrayList<Move> getRandomMoves(int size) {
+    public static String getRandomMoves(int size) {
         ArrayList<Move> moves = new ArrayList<>(size);
+        String s = " ";
 
         if (size <= 0)
-            return moves;
+            return s;
 
         while (moves.size() < size) {
             Move move = Move.getByIndex(new Random().nextInt(Move.NONE.ordinal()));
 
-            if (isValidMove(move, moves))
+            if (isValidMove(move, moves)) {
+                s += move.name() + " ";
                 moves.add(move);
+            }
         }
 
-        return moves;
+        for (int i = 0; i < 2; i++) {
+            Move move = Move.getByIndex(new Random().nextInt(Move.X.ordinal(), Move.M.ordinal()));
+            s += move.name() + " ";
+            moves.add(move);
+        }
+
+        s = s.replace("RW", "r");
+        s = s.replace("LW", "l");
+        s = s.replace("UW", "u");
+        s = s.replace("DW", "d");
+        s = s.replace("BW", "b");
+        s = s.replace("FW", "f");
+        s = s.replace("X", "x");
+        s = s.replace("Y", "y");
+        s = s.replace("Z", "z");
+        s = s.replace("_", "'");
+
+        return s;
     }
 
     private static boolean isValidMove(Move move, ArrayList<Move> moves) {

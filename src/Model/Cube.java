@@ -1,7 +1,5 @@
 package Model;
 
-import java.util.Random;
-
 public class Cube {
     private byte[] stickers;
     private byte[] centers;
@@ -16,6 +14,53 @@ public class Cube {
         this.cornerOrientation = new int[8];
         this.edges = new int[12];
         this.edgeOrientation = new int[12];
+    }
+    
+
+    public void doMoves(String algorithm) {
+        algorithm = algorithm.replace("r", "RW");
+        algorithm = algorithm.replace("l", "LW");
+        algorithm = algorithm.replace("u", "UW");
+        algorithm = algorithm.replace("d", "DW");
+        algorithm = algorithm.replace("b", "BW");
+        algorithm = algorithm.replace("f", "FW");
+        algorithm = algorithm.replace("x", "X");
+        algorithm = algorithm.replace("y", "Y");
+        algorithm = algorithm.replace("z", "Z");
+        algorithm = algorithm.replace("'", "_");
+
+        for (String move : algorithm.split(" "))
+            move(Move.getByName(move));
+    }
+
+    public void undoMoves(String algorithm) {
+        algorithm = algorithm.replace("r", "RW");
+        algorithm = algorithm.replace("l", "LW");
+        algorithm = algorithm.replace("u", "UW");
+        algorithm = algorithm.replace("d", "DW");
+        algorithm = algorithm.replace("b", "BW");
+        algorithm = algorithm.replace("f", "FW");
+        algorithm = algorithm.replace("x", "X");
+        algorithm = algorithm.replace("y", "Y");
+        algorithm = algorithm.replace("z", "Z");
+        algorithm = algorithm.replace("'", "_");
+
+        String[] moves = algorithm.split(" ");
+
+        for (int i = moves.length - 1; i >= 0; i--) {
+            String s = moves[i];
+            if (s.endsWith("2")) {
+                Move move = Move.getByName(s);
+                move(move);
+            } else if (s.endsWith("_")) {
+                String m = s.replace("_", "");
+                Move move = Move.getByName(m);
+                move(move);
+            } else {
+                Move move = Move.getByName(s + "_");
+                move(move);
+            }
+        }
     }
 
     public void move(Move move) {
@@ -500,6 +545,12 @@ public class Cube {
         return -1;
     }
 
+    public static Cube Scramble(String scramble) {
+        Cube cube = Solved();
+        cube.doMoves(scramble);
+        return cube;
+    }
+
     public static Cube Solved() {
         Cube cube = new Cube();
         cube.getSolvedStickers();
@@ -512,11 +563,6 @@ public class Cube {
         return cube;
     }
 
-    public static Cube Random() {
-        Cube cube = new Cube();
-        cube.getRandomStickers();
-        return cube;
-    }
 
     private void getSolvedStickers() {
         this.centers = new byte[] { 5, 4, 3, 2, 1, 0, };
@@ -540,14 +586,6 @@ public class Cube {
                 4, 2, 4, 2, 4, 2, 4, 2,
                 5, 0, 5, 0, 5, 0, 5, 0,
         };
-    }
-
-    private void getRandomStickers() {
-        this.centers = new byte[] { 0, 1, 2, 3, 4, 5, };
-        this.stickers = new byte[48];
-        for (int i = 0; i < 48; i++) {
-            this.stickers[i] = (byte) (new Random().nextInt(6));
-        }
     }
 
     private void rotate90(byte[] array, int a, int b, int c, int d) {
