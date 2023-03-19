@@ -138,6 +138,12 @@ public class ProcessingRenderer extends PApplet {
 		s = s.replace("X", "x");
 		s = s.replace("Y", "y");
 		s = s.replace("Z", "z");
+		s = s.replace("RW", "r");
+		s = s.replace("LW", "l");
+		s = s.replace("UW", "u");
+		s = s.replace("DW", "d");
+		s = s.replace("BW", "b");
+		s = s.replace("FW", "f");
 		System.out.println(s);
 	}
 
@@ -214,7 +220,7 @@ public class ProcessingRenderer extends PApplet {
 
 				getSRotation(rotation);
 				getERotation(rotation);
-				
+
 				getUWRotation(rotation);
 				getDWRotation(rotation);
 				getFWRotation(rotation);
@@ -230,7 +236,7 @@ public class ProcessingRenderer extends PApplet {
 
 				getMRotation(rotation);
 				getERotation(rotation);
-				
+
 				getUWRotation(rotation);
 				getDWRotation(rotation);
 				getFWRotation(rotation);
@@ -246,7 +252,7 @@ public class ProcessingRenderer extends PApplet {
 
 				getSRotation(rotation);
 				getERotation(rotation);
-				
+
 				getUWRotation(rotation);
 				getDWRotation(rotation);
 				getFWRotation(rotation);
@@ -262,7 +268,7 @@ public class ProcessingRenderer extends PApplet {
 
 				getMRotation(rotation);
 				getERotation(rotation);
-				
+
 				getUWRotation(rotation);
 				getDWRotation(rotation);
 				getBWRotation(rotation);
@@ -278,7 +284,7 @@ public class ProcessingRenderer extends PApplet {
 
 				getMRotation(rotation);
 				getSRotation(rotation);
-				
+
 				getDWRotation(rotation);
 				getFWRotation(rotation);
 				getBWRotation(rotation);
@@ -314,7 +320,7 @@ public class ProcessingRenderer extends PApplet {
 				getBRotation(rotation);
 
 				getMRotation(rotation);
-				
+
 				getUWRotation(rotation);
 				getBWRotation(rotation);
 				getRWRotation(rotation);
@@ -331,7 +337,7 @@ public class ProcessingRenderer extends PApplet {
 				getRRotation(rotation);
 
 				getSRotation(rotation);
-				
+
 				getUWRotation(rotation);
 				getFWRotation(rotation);
 				getBWRotation(rotation);
@@ -348,7 +354,7 @@ public class ProcessingRenderer extends PApplet {
 				getFRotation(rotation);
 
 				getMRotation(rotation);
-				
+
 				getUWRotation(rotation);
 				getFWRotation(rotation);
 				getRWRotation(rotation);
@@ -365,7 +371,7 @@ public class ProcessingRenderer extends PApplet {
 				getLRotation(rotation);
 
 				getSRotation(rotation);
-				
+
 				getUWRotation(rotation);
 				getFWRotation(rotation);
 				getBWRotation(rotation);
@@ -382,7 +388,7 @@ public class ProcessingRenderer extends PApplet {
 				getBRotation(rotation);
 
 				getERotation(rotation);
-				
+
 				getUWRotation(rotation);
 				getDWRotation(rotation);
 				getBWRotation(rotation);
@@ -399,7 +405,7 @@ public class ProcessingRenderer extends PApplet {
 				getBRotation(rotation);
 
 				getERotation(rotation);
-				
+
 				getUWRotation(rotation);
 				getDWRotation(rotation);
 				getBWRotation(rotation);
@@ -416,7 +422,7 @@ public class ProcessingRenderer extends PApplet {
 				getFRotation(rotation);
 
 				getERotation(rotation);
-				
+
 				getUWRotation(rotation);
 				getDWRotation(rotation);
 				getFWRotation(rotation);
@@ -433,7 +439,7 @@ public class ProcessingRenderer extends PApplet {
 				getFRotation(rotation);
 
 				getERotation(rotation);
-				
+
 				getUWRotation(rotation);
 				getDWRotation(rotation);
 				getFWRotation(rotation);
@@ -450,7 +456,7 @@ public class ProcessingRenderer extends PApplet {
 				getBRotation(rotation);
 
 				getMRotation(rotation);
-				
+
 				getDWRotation(rotation);
 				getBWRotation(rotation);
 				getRWRotation(rotation);
@@ -467,7 +473,7 @@ public class ProcessingRenderer extends PApplet {
 				getRRotation(rotation);
 
 				getSRotation(rotation);
-				
+
 				getDWRotation(rotation);
 				getFWRotation(rotation);
 				getBWRotation(rotation);
@@ -484,7 +490,7 @@ public class ProcessingRenderer extends PApplet {
 				getFRotation(rotation);
 
 				getMRotation(rotation);
-				
+
 				getDWRotation(rotation);
 				getFWRotation(rotation);
 				getRWRotation(rotation);
@@ -501,7 +507,7 @@ public class ProcessingRenderer extends PApplet {
 				getLRotation(rotation);
 
 				getSRotation(rotation);
-				
+
 				getDWRotation(rotation);
 				getFWRotation(rotation);
 				getBWRotation(rotation);
@@ -537,7 +543,7 @@ public class ProcessingRenderer extends PApplet {
 				getURotation(rotation);
 				getLRotation(rotation);
 				getBRotation(rotation);
-				
+
 				getUWRotation(rotation);
 				getBWRotation(rotation);
 				getLWRotation(rotation);

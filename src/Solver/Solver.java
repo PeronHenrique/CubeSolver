@@ -19,8 +19,8 @@ public class Solver implements Runnable {
     }
 
     private final String testScramble = "";
-    private final int scrambleSpeed = 0;
-    private final int solveSpeed = 0;
+    private final int scrambleSpeed = 25;
+    private final int solveSpeed = 40;
 
     @Override
     public void run() {
@@ -44,8 +44,6 @@ public class Solver implements Runnable {
 
         System.out.println("\nPLL:");
         makeMoves(SolverTables.getMovesPLL(cube), solveSpeed);
-
-        // TODO: optimize wide moves, cube rotations, setup...
     }
 
     private void makeMoves(String algorithm, int maxStep) {
