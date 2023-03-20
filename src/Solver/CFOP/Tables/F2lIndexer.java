@@ -1,4 +1,4 @@
-package Solver.TablesCFOP;
+package Solver.CFOP.Tables;
 
 import Model.Corner;
 import Model.Cube;

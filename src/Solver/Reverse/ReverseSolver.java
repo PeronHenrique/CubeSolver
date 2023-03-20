@@ -1,11 +1,12 @@
-package Solver;
+package Solver.Reverse;
 
 import Model.Move;
-import UI.ProcessingRenderer;
+import Solver.Solver;
+import UI.Renderer;
 
-public class TestSolver extends Solver{
+public class ReverseSolver extends Solver{
 
-    public TestSolver(ProcessingRenderer renderer, String scramble) {
+    public ReverseSolver(Renderer renderer, String scramble) {
         super(renderer, scramble);
     }
 

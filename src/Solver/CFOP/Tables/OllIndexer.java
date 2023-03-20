@@ -1,4 +1,4 @@
-package Solver.TablesCFOP;
+package Solver.CFOP.Tables;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -92,13 +92,13 @@ public class OllIndexer {
             case 0:
                 break;
             case 1:
-                moves += "U' ";
+                moves += "y' ";
                 break;
             case 2:
-                moves += "U2 ";
+                moves += "y2 ";
                 break;
             case 3:
-                moves += "U ";
+                moves += "y ";
                 break;
         }
 
@@ -108,9 +108,9 @@ public class OllIndexer {
 
     private static void createOllHashMap() {
         HashSet<Integer> keys = new HashSet<>();
-        try (FileWriter fw = new FileWriter("src/Solver/OllMap.java")) {
+        try (FileWriter fw = new FileWriter("src/Solver/CFOP/Tables/OllMap.java")) {
 
-            fw.write("package Solver;");
+            fw.write("package Solver.CFOP.Tables;");
             fw.write("\n\n");
 
             fw.write("import java.util.HashMap;");

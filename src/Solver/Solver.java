@@ -1,18 +1,29 @@
 package Solver;
 
 import Model.Cube;
-import UI.ProcessingRenderer;
+import UI.Renderer;
 
 public abstract class Solver implements Runnable {
 
     protected Cube cube;
-    protected ProcessingRenderer renderer;
+    public Cube getCube() {
+        return cube;
+    }
+
+    protected Renderer renderer;
     protected String solution = "";
+    public String getSolution() {
+        return solution;
+    }
+
     protected String scramble = "";
+    public String getScramble() {
+        return scramble;
+    }
 
     private boolean terminalFree = true;
 
-    public Solver(ProcessingRenderer renderer, String scramble) {
+    public Solver(Renderer renderer, String scramble) {
         this.renderer = renderer;
         this.cube = Cube.Scramble(scramble);
         this.scramble = scramble;
@@ -27,12 +38,11 @@ public abstract class Solver implements Runnable {
         // https://stackoverflow.com/questions/43605292/replacing-consecutive-repeated-characters-in-java
         solution = solution.replaceAll("(?s)(.)\\1+", "$1"); // any charsSystem.out.println(t);
         solution = solution.strip();
-        renderer.setSolution(this, solution);
-
-        printSolution(solution);
+        if(renderer != null)
+            renderer.setSolution(this, solution);
     }
 
-    private void printSolution(String solution) {
+    public void printSolution(String solution) {
         while (!terminalFree) {
             try {
                 Thread.sleep(100);

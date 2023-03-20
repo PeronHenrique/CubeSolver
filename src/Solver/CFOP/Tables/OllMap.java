@@ -1,4 +1,4 @@
-package Solver.TablesCFOP;
+package Solver.CFOP.Tables;
 
 import java.util.HashMap;
 

@@ -1,15 +1,16 @@
-package Solver;
+package Solver.CFOP;
 
 import Model.Cube;
-import Solver.TablesCFOP.OllIndexer;
-import Solver.TablesCFOP.PllIndexer;
-import Solver.TablesCFOP.CrossIndexer;
-import Solver.TablesCFOP.F2lIndexer;
-import UI.ProcessingRenderer;
+import Solver.CFOP.Tables.OllIndexer;
+import Solver.CFOP.Tables.PllIndexer;
+import Solver.Solver;
+import Solver.CFOP.Tables.CrossIndexer;
+import Solver.CFOP.Tables.F2lIndexer;
+import UI.Renderer;
 
 public class CFOPSolver extends Solver {
 
-    public CFOPSolver(ProcessingRenderer renderer, String scramble) {
+    public CFOPSolver(Renderer renderer, String scramble) {
         super(renderer, scramble);
     }
 

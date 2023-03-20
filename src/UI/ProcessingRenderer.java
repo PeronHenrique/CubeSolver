@@ -11,12 +11,12 @@ import Model.Cube;
 import Model.Edge;
 import Model.Face;
 import Model.Move;
-import Solver.CFOPSolver;
 import Solver.Solver;
-import Solver.TestSolver;
+import Solver.CFOP.CFOPSolver;
+import Solver.Reverse.ReverseSolver;
 import peasy.*;
 
-public class ProcessingRenderer extends PApplet {
+public class ProcessingRenderer extends PApplet implements Renderer {
 
 	private final COLOR cubeColors[] = {
 			COLOR.YELLOW,
@@ -31,12 +31,11 @@ public class ProcessingRenderer extends PApplet {
 	private final int CUBIE_SIZE = 100;
 	private final int CUBE_SPACING = 600;
 	private final int CFOP_CUBES = 8;
-	private final int TEST_CUBES = 1;
+	private final int REVERSE_CUBES = 1;
 
 	private final int MAX_STEPS = 5;
 
 	private ArrayList<SolverContainer> solvers;
-
 
 	private int step;
 
@@ -49,22 +48,24 @@ public class ProcessingRenderer extends PApplet {
 		size(600, 600, P3D);
 	}
 
+	PeasyCam pCam;
+
 	@Override
 	public void setup() {
-		new PeasyCam(this, 1000);
+		pCam = new PeasyCam(this, 1000);
 		step = 1;
 
 		solvers = new ArrayList<>();
 
 		for (int i = 0; i < CFOP_CUBES; i++) {
-			String scramble= Move.getStringNotation(Move.getRandomMoves(20));
+			String scramble = Move.getStringNotation(Move.getRandomMoves(20));
 			CFOPSolver solver = new CFOPSolver(this, scramble);
 			solvers.add(new SolverContainer(solver, scramble));
 		}
 
-		for (int i = 0; i < TEST_CUBES; i++) {
-			String scramble= Move.getStringNotation(Move.getRandomMoves(20));
-			TestSolver solver = new TestSolver(this, scramble);
+		for (int i = 0; i < REVERSE_CUBES; i++) {
+			String scramble = Move.getStringNotation(Move.getRandomMoves(20));
+			ReverseSolver solver = new ReverseSolver(this, scramble);
 			solvers.add(new SolverContainer(solver, scramble));
 		}
 
@@ -76,13 +77,17 @@ public class ProcessingRenderer extends PApplet {
 			if (sc.getSolver() == solver)
 				sc.setSolution(solution);
 		}
+
+		solver.printSolution(solution);
 	}
 
 	@Override
 	public void draw() {
-		translate(-720, -600, -1000);
-		rotateX(-.4f);
-		rotateY(-.3f);
+		rotateX(-0.2813f);
+		rotateY(-0.4154f);
+		rotateZ(0.0163f);
+		translate(-1035, -360, -824);
+
 
 		background(120);
 
