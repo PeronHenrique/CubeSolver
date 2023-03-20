@@ -1,6 +1,5 @@
 package Model;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public enum Move {
@@ -42,52 +41,93 @@ public enum Move {
         return Move.NONE;
     }
 
-    public static String getRandomMoves(int size) {
-        ArrayList<Move> moves = new ArrayList<>(size);
-        String s = " ";
+    public static Move[] getMoves(String algorithm) {
+        algorithm = algorithm.replace("r", "RW");
+        algorithm = algorithm.replace("l", "LW");
+        algorithm = algorithm.replace("u", "UW");
+        algorithm = algorithm.replace("d", "DW");
+        algorithm = algorithm.replace("b", "BW");
+        algorithm = algorithm.replace("f", "FW");
+        algorithm = algorithm.replace("x", "X");
+        algorithm = algorithm.replace("y", "Y");
+        algorithm = algorithm.replace("z", "Z");
+        algorithm = algorithm.replace("'", "_");
 
-        if (size <= 0)
-            return s;
+        String[] movesStr = algorithm.split(" ");
+        Move[] moves = new Move[movesStr.length];
 
-        while (moves.size() < size) {
-            Move move = Move.getByIndex(new Random().nextInt(Move.NONE.ordinal()));
+        for (int i = 0; i < moves.length; i++)
+            moves[i] = Move.getByName(movesStr[i]);
 
-            if (isValidMove(move, moves)) {
-                s += move.name() + " ";
-                moves.add(move);
+        return moves;
+    }
+
+    public static Move[] getUndoMoves(String algorithm) {
+        algorithm = algorithm.replace("r", "RW");
+        algorithm = algorithm.replace("l", "LW");
+        algorithm = algorithm.replace("u", "UW");
+        algorithm = algorithm.replace("d", "DW");
+        algorithm = algorithm.replace("b", "BW");
+        algorithm = algorithm.replace("f", "FW");
+        algorithm = algorithm.replace("x", "X");
+        algorithm = algorithm.replace("y", "Y");
+        algorithm = algorithm.replace("z", "Z");
+        algorithm = algorithm.replace("'", "_");
+
+
+        String[] movesStr = algorithm.split(" ");
+        Move[] moves = new Move[movesStr.length];
+
+        for (int i = movesStr.length - 1; i >= 0; i--) {
+            String s = movesStr[i];
+            if (s.endsWith("2")) {
+                Move move = Move.getByName(s);
+                moves[movesStr.length - 1 - i] = move;
+            } else if (s.endsWith("_")) {
+                String m = s.replace("_", "");
+                Move move = Move.getByName(m);
+                moves[movesStr.length - 1 - i] = move;
+            } else {
+                Move move = Move.getByName(s + "_");
+                moves[movesStr.length - 1 - i] = move;
             }
         }
 
-        for (int i = 0; i < 2; i++) {
-            Move move = Move.getByIndex(new Random().nextInt(Move.X.ordinal(), Move.M.ordinal()));
-            s += move.name() + " ";
-            moves.add(move);
-        }
-
-        s = s.replace("RW", "r");
-        s = s.replace("LW", "l");
-        s = s.replace("UW", "u");
-        s = s.replace("DW", "d");
-        s = s.replace("BW", "b");
-        s = s.replace("FW", "f");
-        s = s.replace("X", "x");
-        s = s.replace("Y", "y");
-        s = s.replace("Z", "z");
-        s = s.replace("_", "'");
-
-        return s;
+        return moves;
     }
 
-    private static boolean isValidMove(Move move, ArrayList<Move> moves) {
-        if (moves.size() == 0)
+    public static Move[] getRandomMoves(int size) {
+        if (size <= 0)
+            return new Move[0];
+
+        Move[] moves = new Move[size + 2];
+
+        moves[0] = Move.getByIndex(new Random().nextInt(Move.X.ordinal(), Move.M.ordinal()));
+        int index = 1;
+        
+        while (index < size+1) {
+            Move move = Move.getByIndex(new Random().nextInt(Move.NONE.ordinal()));
+
+            if (isValidMove(move, moves, index)) {
+                moves[index] = move;
+                index++;
+            }
+        }
+
+        moves[size + 1] = Move.getByIndex(new Random().nextInt(Move.X.ordinal(), Move.M.ordinal()));
+        return moves;
+    }
+
+    private static boolean isValidMove(Move move, Move[] moves, int index) {
+        if (index == 1)
             return true;
 
-        Move last = moves.get(moves.size() - 1);
+        Move last = moves[index - 1];
 
-        if (moves.size() == 1)
+        if (index == 2)
             return checkLastMove(move, last);
 
-        Move secondLast = moves.get(moves.size() - 2);
+        Move secondLast = moves[index - 2];
 
         return checkSecendLastMove(move, last, secondLast);
     }
@@ -171,4 +211,19 @@ public enum Move {
         }
     }
 
+    public static String getStringNotation(Move[] moves){
+        String s = "";
+        for (Move move : moves) s += move.name() + " ";
+        s = s.replace("RW", "r");
+        s = s.replace("LW", "l");
+        s = s.replace("UW", "u");
+        s = s.replace("DW", "d");
+        s = s.replace("BW", "b");
+        s = s.replace("FW", "f");
+        s = s.replace("X", "x");
+        s = s.replace("Y", "y");
+        s = s.replace("Z", "z");
+        s = s.replace("_", "'");
+        return s.trim();
+    }
 }

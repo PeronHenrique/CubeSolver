@@ -1,0 +1,168 @@
+
+
+    // protected void optimizeMoves() {
+
+    // System.out.println("Scramble: " + scramble);
+    // System.out.println("Solution Before: " + solution);
+
+    // // black magic:
+    // //
+    // https://stackoverflow.com/questions/43605292/replacing-consecutive-repeated-characters-in-java
+    // solution = solution.replaceAll("(?s)(.)\\1+", "$1"); // any
+    // charsSystem.out.println(t);
+    // solution = solution.strip();
+
+    // int moveCount = removeCubeRotation();
+
+    // System.out.println("Solution " + moveCount + " moves from " +
+    // this.getClass().getName() + ": ");
+    // System.out.println(solution);
+
+    // renderer.setSolution(this, solution);
+    // }
+
+    // private int removeCubeRotation() {
+    // ArrayList<String> moves = new ArrayList<>(Arrays.asList(solution.split("
+    // ")));
+    // ArrayList<String> cubeRotations = new ArrayList<>();
+
+    // for (int i = 0; i < moves.size(); i++) {
+    // String move = moves.get(i);
+
+    // if(isRotation(move)){
+    // cubeRotations.add(move);
+    // moves.remove(i);
+    // i--;
+    // continue;
+    // }
+
+    // for (String rotation : cubeRotations)
+    // move = rotate(move, rotation);
+
+    // moves.set(i, move);
+    // }
+
+    // solution = "";
+    // for (String move : moves) solution += move + " ";
+
+    // solution = solution.trim();
+    // return moves.size();
+    // }
+
+    // private boolean isRotation(String move) {
+    // if("y".equals(move)) return true;
+    // if("y'".equals(move)) return true;
+    // if("x".equals(move)) return true;
+    // if("x'".equals(move)) return true;
+    // if("z".equals(move)) return true;
+    // if("z'".equals(move)) return true;
+    // return false;
+    // }
+
+    // private String rotate(String move, String rotation) {
+    // switch (rotation) {
+    // case "x":
+    // move = move.replace("f", "t");
+    // move = move.replace("F", "T");
+    // move = move.replace("u", "f");
+    // move = move.replace("U", "F");
+    // move = move.replace("b", "u");
+    // move = move.replace("B", "U");
+    // move = move.replace("d", "b");
+    // move = move.replace("D", "B");
+    // move = move.replace("t", "d");
+    // move = move.replace("T", "D");
+
+    // move = move.replace("y", "t");
+    // move = move.replace("z", "y");
+    // move = move.replace("t", "z");
+    // break;
+
+    // case "x'":
+    // move = move.replace("f", "t");
+    // move = move.replace("F", "T");
+    // move = move.replace("u", "b");
+    // move = move.replace("U", "B");
+    // move = move.replace("b", "d");
+    // move = move.replace("B", "D");
+    // move = move.replace("d", "f");
+    // move = move.replace("D", "F");
+    // move = move.replace("t", "u");
+    // move = move.replace("T", "U");
+
+    // move = move.replace("y", "t");
+    // move = move.replace("z", "y");
+    // move = move.replace("t", "z");
+    // break;
+
+    // case "y":
+    // move = move.replace("f", "t");
+    // move = move.replace("F", "T");
+    // move = move.replace("r", "b");
+    // move = move.replace("R", "B");
+    // move = move.replace("b", "l");
+    // move = move.replace("B", "L");
+    // move = move.replace("l", "f");
+    // move = move.replace("L", "F");
+    // move = move.replace("t", "r");
+    // move = move.replace("T", "R");
+
+    // move = move.replace("x", "t");
+    // move = move.replace("z", "x");
+    // move = move.replace("t", "z");
+    // break;
+
+    // case "y'":
+    // move = move.replace("f", "t");
+    // move = move.replace("F", "T");
+    // move = move.replace("l", "b");
+    // move = move.replace("L", "B");
+    // move = move.replace("b", "r");
+    // move = move.replace("B", "R");
+    // move = move.replace("r", "f");
+    // move = move.replace("R", "F");
+    // move = move.replace("t", "l");
+    // move = move.replace("T", "L");
+
+    // move = move.replace("x", "t");
+    // move = move.replace("z", "x");
+    // move = move.replace("t", "z");
+    // break;
+
+    // case "z":
+    // move = move.replace("u", "t");
+    // move = move.replace("U", "T");
+    // move = move.replace("l", "d");
+    // move = move.replace("L", "D");
+    // move = move.replace("d", "r");
+    // move = move.replace("D", "R");
+    // move = move.replace("r", "u");
+    // move = move.replace("R", "U");
+    // move = move.replace("t", "l");
+    // move = move.replace("T", "L");
+
+    // move = move.replace("y", "t");
+    // move = move.replace("x", "y");
+    // move = move.replace("t", "x");
+    // break;
+
+    // case "z'":
+    // move = move.replace("d", "t");
+    // move = move.replace("D", "T");
+    // move = move.replace("r", "u");
+    // move = move.replace("R", "U");
+    // move = move.replace("u", "l");
+    // move = move.replace("U", "L");
+    // move = move.replace("l", "d");
+    // move = move.replace("L", "D");
+    // move = move.replace("t", "r");
+    // move = move.replace("T", "R");
+
+    // move = move.replace("y", "t");
+    // move = move.replace("x", "y");
+    // move = move.replace("t", "x");
+    // break;
+    // }
+
+    // return move;
+    // }

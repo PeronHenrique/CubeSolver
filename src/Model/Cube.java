@@ -15,52 +15,15 @@ public class Cube {
         this.edges = new int[12];
         this.edgeOrientation = new int[12];
     }
-    
 
     public void doMoves(String algorithm) {
-        algorithm = algorithm.replace("r", "RW");
-        algorithm = algorithm.replace("l", "LW");
-        algorithm = algorithm.replace("u", "UW");
-        algorithm = algorithm.replace("d", "DW");
-        algorithm = algorithm.replace("b", "BW");
-        algorithm = algorithm.replace("f", "FW");
-        algorithm = algorithm.replace("x", "X");
-        algorithm = algorithm.replace("y", "Y");
-        algorithm = algorithm.replace("z", "Z");
-        algorithm = algorithm.replace("'", "_");
-
-        for (String move : algorithm.split(" "))
-            move(Move.getByName(move));
+        for (Move move : Move.getMoves(algorithm))
+            this.move(move);
     }
 
     public void undoMoves(String algorithm) {
-        algorithm = algorithm.replace("r", "RW");
-        algorithm = algorithm.replace("l", "LW");
-        algorithm = algorithm.replace("u", "UW");
-        algorithm = algorithm.replace("d", "DW");
-        algorithm = algorithm.replace("b", "BW");
-        algorithm = algorithm.replace("f", "FW");
-        algorithm = algorithm.replace("x", "X");
-        algorithm = algorithm.replace("y", "Y");
-        algorithm = algorithm.replace("z", "Z");
-        algorithm = algorithm.replace("'", "_");
-
-        String[] moves = algorithm.split(" ");
-
-        for (int i = moves.length - 1; i >= 0; i--) {
-            String s = moves[i];
-            if (s.endsWith("2")) {
-                Move move = Move.getByName(s);
-                move(move);
-            } else if (s.endsWith("_")) {
-                String m = s.replace("_", "");
-                Move move = Move.getByName(m);
-                move(move);
-            } else {
-                Move move = Move.getByName(s + "_");
-                move(move);
-            }
-        }
+        for (Move move : Move.getUndoMoves(algorithm))
+            this.move(move);
     }
 
     public void move(Move move) {
@@ -453,7 +416,7 @@ public class Cube {
 
         switch (codex) {
             default:
-            return -1;
+                return -1;
             case 17:
                 return Edge.UB.ordinal();
             case 9:
@@ -551,6 +514,19 @@ public class Cube {
         return cube;
     }
 
+    public static Cube Copy(Cube cube) {
+        Cube newCube = Solved();
+        for (int i = 0; i < 48; i++)
+            newCube.stickers[i] = cube.stickers[i];
+        
+        
+        for (int i = 0; i < 6; i++)
+            newCube.centers[i] = cube.centers[i];
+
+        newCube.update();
+        return newCube;
+    }
+
     public static Cube Solved() {
         Cube cube = new Cube();
         cube.getSolvedStickers();
@@ -562,7 +538,6 @@ public class Cube {
         cube.getCheckerBoardStickers();
         return cube;
     }
-
 
     private void getSolvedStickers() {
         this.centers = new byte[] { 5, 4, 3, 2, 1, 0, };

@@ -13,6 +13,7 @@ import Model.Face;
 import Model.Move;
 import Solver.CFOPSolver;
 import Solver.Solver;
+import Solver.TestSolver;
 import peasy.*;
 
 public class ProcessingRenderer extends PApplet {
@@ -29,12 +30,13 @@ public class ProcessingRenderer extends PApplet {
 	private final int HALF_CUBIE_SIZE = 50;
 	private final int CUBIE_SIZE = 100;
 	private final int CUBE_SPACING = 600;
+	private final int CFOP_CUBES = 8;
+	private final int TEST_CUBES = 1;
 
-	private final int MAX_STEPS = 30;
+	private final int MAX_STEPS = 5;
 
 	private ArrayList<SolverContainer> solvers;
 
-	private final String testScramble = "";
 
 	private int step;
 
@@ -54,16 +56,16 @@ public class ProcessingRenderer extends PApplet {
 
 		solvers = new ArrayList<>();
 
-		for (int i = 0; i < 9; i++) {
-			String scramble;
-			if ("".equals(testScramble))
-				scramble = Move.getRandomMoves(20);
-			else
-				scramble = testScramble;
+		for (int i = 0; i < CFOP_CUBES; i++) {
+			String scramble= Move.getStringNotation(Move.getRandomMoves(20));
+			CFOPSolver solver = new CFOPSolver(this, scramble);
+			solvers.add(new SolverContainer(solver, scramble));
+		}
 
-
-			CFOPSolver cfop = new CFOPSolver(this, scramble);
-			solvers.add(new SolverContainer(cfop, scramble));
+		for (int i = 0; i < TEST_CUBES; i++) {
+			String scramble= Move.getStringNotation(Move.getRandomMoves(20));
+			TestSolver solver = new TestSolver(this, scramble);
+			solvers.add(new SolverContainer(solver, scramble));
 		}
 
 		drawCubes();
@@ -78,9 +80,9 @@ public class ProcessingRenderer extends PApplet {
 
 	@Override
 	public void draw() {
-		translate(-720, -720, -1000);
-		// rotateX(-.4f);
-		// rotateY(-.4f);
+		translate(-720, -600, -1000);
+		rotateX(-.4f);
+		rotateY(-.3f);
 
 		background(120);
 

@@ -34,7 +34,6 @@ public class SolverContainer {
         setScramble(scramble);
         setSolution(" ");
         move = Move.NONE;
-        new Thread(this.solver).start();
     }
 
     public void setScramble(String scrambleStr) {
