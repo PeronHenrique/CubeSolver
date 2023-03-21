@@ -22,7 +22,7 @@ public class Cube {
     }
 
     public void undoMoves(String algorithm) {
-        for (Move move : Move.getUndoMoves(algorithm))
+        for (Move move : Move.getReversedMoves(algorithm))
             this.move(move);
     }
 
@@ -518,8 +518,7 @@ public class Cube {
         Cube newCube = Solved();
         for (int i = 0; i < 48; i++)
             newCube.stickers[i] = cube.stickers[i];
-        
-        
+
         for (int i = 0; i < 6; i++)
             newCube.centers[i] = cube.centers[i];
 
@@ -925,6 +924,14 @@ public class Cube {
     private void UW_() {
         this.U_();
         this.E();
+    }
+
+    public static boolean compare(Cube cube1, Cube cube2) {
+        for (int i = 0; i < 48; i++)
+            if (cube1.stickers[i] != cube2.stickers[i])
+                return false;
+
+        return true;
     }
 
 }

@@ -5,6 +5,7 @@ import Model.Cube;
 import Model.Edge;
 
 public class F2lIndexer {
+    //TODO: optmize F2L, but how?
     private static final String[] F2L = {
             // 0
             "U R U2 R' U R U' R'",

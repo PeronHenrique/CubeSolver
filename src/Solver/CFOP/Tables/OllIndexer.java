@@ -3,9 +3,7 @@ package Solver.CFOP.Tables;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
-
 import Model.Cube;
-
 public class OllIndexer {
 
     private static final String OllAlgs[] = {
@@ -18,16 +16,16 @@ public class OllIndexer {
             "r U2 R' U' R U' r'",
             "r U R' U R U2 r'",
             "l' U' L U' L' U2 l",
-            "R U R' U' R' F R2 U R' U' F'",
-            "R U R' U R' F R F' R U2 R'",
-            "r U R' U R' F R F' R U2 r'",
+            "r' R2 U2 R' U' R U' R' U' M'",
+            "R U R' B' R B U' B' R' B",
+            "M R U R' U R U2 R' U M'",
             "M' R' U' R U' R' U2 R U' M",
-            "F U R U' R2 F' R U R U' R'",
+            "r U' r' U' r U r' F' U F",
             "R' F R U R' F' R F U' F'",
             "l' U' M U' L U l' U l",
             "r U M U R' U' r U' r'",
             "F R' F' R2 r' U R U' R' U' M'",
-            "r U R' U R U2 r2 U' R U' R' U2 r",
+            "F R U R' d R' U2 R' F R F'",
             "M U R U R' U' M' R' F R F'",
             "r U R' U' M2 U R U' R' U' M'",
             "R U2 R' U' R U R' U' R U' R'",
@@ -37,26 +35,26 @@ public class OllIndexer {
             "F' r U R' U' r' F R",
             "R U2 R' U' R U' R'",
             "R U R' U R U2 R'",
-            "r U R' U' M U R U' R'",
-            "R U R' U' R U' R' F' U' F R U R'",
+            "M' U M U2 M' U M",
+            "M U R U R' U' R' F R F' M'",
             "F R' F R2 U' R' U' R U R' F2",
-            "R' U' F U R U' R' F' R",
+            "S R U R' U' f' U' F",
             "L U F' U' L' U L F L'",
             "R U R' U' R' F R F'",
-            "R U R2 U' R' F R U R U' F'",
+            "R U R' U' B' R' F R F' B",
             "R U2 R2 F R F' R U2 R'",
-            "L' U' L U' L' U L U L F' L' F",
+            "R U R' U' F' U2 F U R U R'",
             "F R' F' R U R U' R'",
-            "R U R' U R U' R' U' R' F R F'",
+            "R' U2 r' D' r U2 r' D R r",
             "L F' L' U' L U F U' L'",
             "R' F R U R' U' F' U R",
-            "R U R' U R U2 R' F R U R' U' F'",
-            "R' U' R U' R' U2 R F R U R' U' F'",
+            "R U' R' U2 R U B U' B' U' R'",
+            "M U F R U R' U' F' M'",
             "F' U' L' U L F",
             "F U R U' R' F'",
             "F R U R' U' F'",
             "R' U' R' F R F' U R",
-            "R' U' R' F R F' R' F R F' U R",
+            "F' L' U' L U L' U' L U F",
             "F R U R' U' R U R' U' F'",
             "r U' r2 U r2 U r2 U' r",
             "r' U r2 U' r2 U' r2 U r'",
@@ -64,8 +62,8 @@ public class OllIndexer {
             "R U R' U R U' B U' B' R'",
             "l' U2 L U L' U' L U L' U l",
             "r U2 R' U' R U R' U' R U' r'",
-            "R' F R U R U' R2 F' R2 U' R' U R U R'",
-            "r' U' r U' R' U R U' R' U R r' U r",
+            "R U2 R2 U' R U' R' U2 F R F'",
+            "F R U R' U' R F' r U R' U' r'",
             "R U R' U' M' U R U' r'",
     };
 
@@ -101,7 +99,7 @@ public class OllIndexer {
                 moves += "y ";
                 break;
         }
-
+        
         moves += OllAlgs[(index / 4)];
         return moves;
     }
@@ -143,7 +141,6 @@ public class OllIndexer {
                     if (!keys.contains(codex)) {
                         keys.add(codex);
                         fw.write(String.format("			put(0x%04x, %d);", codex, index));
-                        // fw.write(" put(" + (codex) + ", " + index + ");");
                         fw.write("\n");
                     }
                     index++;

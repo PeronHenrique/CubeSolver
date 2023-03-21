@@ -1,6 +1,7 @@
 package Solver;
 
 import Model.Cube;
+import Model.Move;
 import UI.Renderer;
 
 public abstract class Solver implements Runnable {
@@ -34,10 +35,7 @@ public abstract class Solver implements Runnable {
     public abstract void run();
 
     protected void setSolution(String solution) {
-        // black magic to remove multiple repeated caracteres:
-        // https://stackoverflow.com/questions/43605292/replacing-consecutive-repeated-characters-in-java
-        solution = solution.replaceAll("(?s)(.)\\1+", "$1"); // any charsSystem.out.println(t);
-        solution = solution.strip();
+        Move.simplifyString(solution);
         if(renderer != null)
             renderer.setSolution(this, solution);
     }

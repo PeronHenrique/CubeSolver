@@ -13,6 +13,7 @@ import Model.Face;
 import Model.Move;
 import Solver.Solver;
 import Solver.CFOP.CFOPSolver;
+import Solver.CFOP.OptimizedCFOP;
 import Solver.Reverse.ReverseSolver;
 import peasy.*;
 
@@ -30,8 +31,9 @@ public class ProcessingRenderer extends PApplet implements Renderer {
 	private final int HALF_CUBIE_SIZE = 50;
 	private final int CUBIE_SIZE = 100;
 	private final int CUBE_SPACING = 600;
-	private final int CFOP_CUBES = 8;
-	private final int REVERSE_CUBES = 1;
+	private final int CFOP_CUBES = 3;
+	private final int CFOP_OPT_CUBES = 3;
+	private final int REVERSE_CUBES = 3;
 
 	private final int MAX_STEPS = 5;
 
@@ -58,13 +60,20 @@ public class ProcessingRenderer extends PApplet implements Renderer {
 		solvers = new ArrayList<>();
 
 		for (int i = 0; i < CFOP_CUBES; i++) {
-			String scramble = Move.getStringNotation(Move.getRandomMoves(20));
+			String scramble = Move.getStringNotation(Move.getScramble(20));
 			CFOPSolver solver = new CFOPSolver(this, scramble);
 			solvers.add(new SolverContainer(solver, scramble));
 		}
 
+		
+		for (int i = 0; i < CFOP_OPT_CUBES; i++) {
+			String scramble = Move.getStringNotation(Move.getScramble(20));
+			OptimizedCFOP solver = new OptimizedCFOP(this, scramble);
+			solvers.add(new SolverContainer(solver, scramble));
+		}
+
 		for (int i = 0; i < REVERSE_CUBES; i++) {
-			String scramble = Move.getStringNotation(Move.getRandomMoves(20));
+			String scramble = Move.getStringNotation(Move.getScramble(20));
 			ReverseSolver solver = new ReverseSolver(this, scramble);
 			solvers.add(new SolverContainer(solver, scramble));
 		}

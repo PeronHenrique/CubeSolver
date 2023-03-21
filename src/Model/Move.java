@@ -23,15 +23,6 @@ public enum Move {
     BW, BW_, BW2,
     FW, FW_, FW2,;
 
-    public static Move getByIndex(int index) {
-        for (Move move : Move.values()) {
-            if (move.ordinal() == index)
-                return move;
-        }
-
-        return Move.NONE;
-    }
-
     public static Move getByName(String name) {
         for (Move move : Move.values()) {
             if (move.name().equals(name))
@@ -42,6 +33,8 @@ public enum Move {
     }
 
     public static Move[] getMoves(String algorithm) {
+        algorithm = simplifyString(algorithm);
+
         algorithm = algorithm.replace("r", "RW");
         algorithm = algorithm.replace("l", "LW");
         algorithm = algorithm.replace("u", "UW");
@@ -62,7 +55,9 @@ public enum Move {
         return moves;
     }
 
-    public static Move[] getUndoMoves(String algorithm) {
+    public static Move[] getReversedMoves(String algorithm) {
+        algorithm = simplifyString(algorithm);
+
         algorithm = algorithm.replace("r", "RW");
         algorithm = algorithm.replace("l", "LW");
         algorithm = algorithm.replace("u", "UW");
@@ -73,7 +68,6 @@ public enum Move {
         algorithm = algorithm.replace("y", "Y");
         algorithm = algorithm.replace("z", "Z");
         algorithm = algorithm.replace("'", "_");
-
 
         String[] movesStr = algorithm.split(" ");
         Move[] moves = new Move[movesStr.length];
@@ -96,16 +90,41 @@ public enum Move {
         return moves;
     }
 
+    public static String simplifyString(String algorithm) {
+        // black magic to remove multiple repeated caracteres:
+        // https://stackoverflow.com/questions/43605292/replacing-consecutive-repeated-characters-in-java
+        algorithm = algorithm.replaceAll("(?s)(.)\\1+", "$1"); // any charsSystem.out.println(t);
+        algorithm = algorithm.strip();
+        return algorithm;
+    }
+
+    public static String getStringNotation(Move[] moves) {
+        String s = "";
+        for (Move move : moves)
+            if (move != NONE)
+                s += move.name() + " ";
+
+        s = s.replace("RW", "r");
+        s = s.replace("LW", "l");
+        s = s.replace("UW", "u");
+        s = s.replace("DW", "d");
+        s = s.replace("BW", "b");
+        s = s.replace("FW", "f");
+        s = s.replace("X", "x");
+        s = s.replace("Y", "y");
+        s = s.replace("Z", "z");
+        s = s.replace("_", "'");
+        return s.trim();
+    }
+
     public static Move[] getRandomMoves(int size) {
         if (size <= 0)
             return new Move[0];
 
-        Move[] moves = new Move[size + 2];
+        Move[] moves = new Move[size];
+        int index = 0;
 
-        moves[0] = Move.getByIndex(new Random().nextInt(Move.X.ordinal(), Move.M.ordinal()));
-        int index = 1;
-        
-        while (index < size+1) {
+        while (index < size) {
             Move move = Move.getByIndex(new Random().nextInt(Move.NONE.ordinal()));
 
             if (isValidMove(move, moves, index)) {
@@ -114,17 +133,41 @@ public enum Move {
             }
         }
 
-        moves[size + 1] = Move.getByIndex(new Random().nextInt(Move.X.ordinal(), Move.M.ordinal()));
         return moves;
     }
 
+    public static Move[] getScramble(int size) {
+        if (size <= 0)
+            return new Move[0];
+
+        Move[] moves = new Move[size + 2];
+
+        moves[0] = Move.getByIndex(new Random().nextInt(Move.X.ordinal(), Move.M.ordinal())); moves[size + 1] = Move.getByIndex(new Random().nextInt(Move.X.ordinal(), Move.M.ordinal()));
+        moves[size + 1] = Move.getByIndex(new Random().nextInt(Move.X.ordinal(), Move.M.ordinal()));
+       
+        Move[] scramble = getRandomMoves(size);
+        for (int i = 0; i < size; i++) 
+            moves[i+1] = scramble[i];
+
+        return moves;
+    }
+
+    private static Move getByIndex(int index) {
+        for (Move move : Move.values()) {
+            if (move.ordinal() == index)
+                return move;
+        }
+
+        return Move.NONE;
+    }
+
     private static boolean isValidMove(Move move, Move[] moves, int index) {
-        if (index == 1)
+        if (index == 0)
             return true;
 
         Move last = moves[index - 1];
 
-        if (index == 2)
+        if (index == 1)
             return checkLastMove(move, last);
 
         Move secondLast = moves[index - 2];
@@ -209,21 +252,5 @@ public enum Move {
             case NONE:
                 return false;
         }
-    }
-
-    public static String getStringNotation(Move[] moves){
-        String s = "";
-        for (Move move : moves) s += move.name() + " ";
-        s = s.replace("RW", "r");
-        s = s.replace("LW", "l");
-        s = s.replace("UW", "u");
-        s = s.replace("DW", "d");
-        s = s.replace("BW", "b");
-        s = s.replace("FW", "f");
-        s = s.replace("X", "x");
-        s = s.replace("Y", "y");
-        s = s.replace("Z", "z");
-        s = s.replace("_", "'");
-        return s.trim();
     }
 }

@@ -12,7 +12,7 @@ public class ReverseSolver extends Solver{
 
     @Override
     public void run() {
-        solution = Move.getStringNotation(Move.getUndoMoves(scramble));
+        solution = Move.getStringNotation(Move.getReversedMoves(scramble));
         cube.doMoves(solution);
         
         setSolution(solution);
